@@ -56,7 +56,7 @@
     document.getElementById('as-u').focus();
   }
   window.AKU_KAPCSOLAT = setup;
-  window.AKU_KILEP = function () { set('aku_key', ''); location.reload(); };
+  window.AKU_KILEP = function () { set('aku_key', ''); try { LS.removeItem('aku_d'); } catch (e) {} location.reload(); };
   document.addEventListener('DOMContentLoaded', function () { var c = conf(); if (!c.url || !c.key) setup(); });
   if ('serviceWorker' in navigator && /^https:|^http:\/\/localhost/.test(location.href)) {
     // Új verzió esetén egyszer magától újratölt, hogy ne maradjon a régi kód a memóriában
