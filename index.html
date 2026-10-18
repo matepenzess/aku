@@ -1318,7 +1318,11 @@ var UE_ALL={jo:['Fizetettre állítható','t-zold'],mar:['Már fizetett','t-szur
 var UEK={};
 function ueDatum(e){return new Date(e.datum).toLocaleDateString('hu-HU',{month:'short',day:'numeric'});}
 // főoldali sáv: csak a friss (30 nap), el nem rejtett elszámolások; az X elrejti, a fülön megmarad
+// Elrejtés eszközönként, helyben (a szervert nem módosítja; így a telefon és a próba mód is használhatja)
+var UE_LOKAL={};try{UE_LOKAL=JSON.parse(localStorage.getItem('ue_rejtve')||'{}')}catch(e){}
+function ueLokalMent(){try{localStorage.setItem('ue_rejtve',JSON.stringify(UE_LOKAL))}catch(e){}}
 function rajzUe(){
+  (D.ue||[]).forEach(function(e){if(UE_LOKAL[e.id])e.rejtve=true;});
   var U=(D.ue||[]).filter(function(e){return e.sorok.length&&e.friss&&!e.rejtve&&(e.joDb||e.gondDb||e.kisDb)});
   document.getElementById('ue').innerHTML=U.map(function(e){
     return '<div class="ueban">💰 <span><b>Utánvét-elszámolás érkezett</b> ('+ueDatum(e)+', '+e.sorok.length+' tétel, '+ft(e.osszeg)+'): <b class="g">'+e.joDb+' fizetettre állítható</b>'+
@@ -1385,9 +1389,10 @@ function ueFizet(id){
   .muvelet(KULCS,'paid',idk,false);
 }
 function ueLezar(id,csendes){
-  var e=ueKeres(id);if(e){e.rejtve=true;}rajzUe();rajzUeFul();
-  google.script.run.withSuccessHandler(function(){if(!csendes)zar();toast('Elrejtve – az Utánvétek fülön megtalálod.','ok',4);})
-   .withFailureHandler(function(err){if(e)e.rejtve=false;rajzUe();rajzUeFul();toast('Hiba: '+esc(err.message),'hiba');}).utanvetLezar(KULCS,id);
+  var e=ueKeres(id);if(e){e.rejtve=true;}UE_LOKAL[id]=1;ueLokalMent();rajzUe();rajzUeFul();
+  if(!csendes)zar();toast('Elrejtve – az Utánvétek fülön megtalálod.','ok',4);
+  // Éles üzemmódban (nem próba, nem telefon) a közös, szerveroldali elrejtés is megtörténik
+  if(!PROBA&&!document.body.classList.contains('csakolv'))google.script.run.withSuccessHandler(function(){}).withFailureHandler(function(){}).utanvetLezar(KULCS,id);
 }
 
 // ===== EXPORT NAPLÓ =====
