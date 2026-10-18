@@ -329,6 +329,7 @@ body.has-insp .abar{left:calc(50% + 110px - 180px)}
 .seg{display:flex;background:var(--field);border-radius:9px;padding:2px}.seg button{flex:1;height:30px;border:0;border-radius:7px;background:none;color:var(--tx);font-size:13px}
 .seg button.on{background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.25);font-weight:600}
 .maim.kihagy{display:none!important}
+.csakolv [onclick*="cimke("],.csakolv [onclick*="apiTorol("],.csakolv [onclick*="zarasInd("],.csakolv [onclick*="vrFel"],.csakolv [onclick*="vrMent("],.csakolv [onclick*="vrUj("],.csakolv [onclick*="rkKuld("],.csakolv [onclick*="expVissza("],.csakolv [onclick*="fuMent("],.csakolv .vr,
 .csakolv .abar,.csakolv #tb-csv,.csakolv .go,.csakolv .c .a1,.csakolv .lfej .cb,.csakolv .fubox,.csakolv #mate-lezar,.csakolv .tbem,.csakolv .hd .ib[onclick^="beallit"]{display:none!important}
 @keyframes feljon{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
 @media (max-width:760px){
@@ -497,13 +498,14 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
   document.documentElement.setAttribute('data-theme',t);var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',t==='dark'?'#232326':'#ffffff');}
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();tobb();}
+var AKU_VERZIO='2026-10-18 · 3';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
   modal('<h3>Több</h3><div class="tobb-l">'+li('ue','Utánvétek','c-ue')+li('mate5','MATE kupon','c-mate5')+li('naplo','Export napló','')+'</div>'+
     '<div class="kl2">Megjelenés</div><div class="seg">'+th('system','Rendszer')+th('light','Világos')+th('dark','Sötét')+'</div>'+
     (window.AKU_WEB?'<div class="tobb-l" style="margin-top:14px"><button class="tobb-i" onclick="zar();AKU_KAPCSOLAT()">Kapcsolat…</button><button class="tobb-i" style="color:var(--r)" onclick="AKU_KILEP()">Kijelentkezés</button></div>':'')+
-    '<div class="gombok"><button class="btn fo" onclick="zar()">Kész</button></div>');
+    '<div class="sub" style="margin:14px 4px 0">AKU 2.0 · verzió '+AKU_VERZIO+'</div><div class="gombok"><button class="btn fo" onclick="zar()">Kész</button></div>');
 }
 function ful(n){FUL=n;var tb=document.getElementById('nav-tobb');if(tb)tb.classList.toggle('on',['ue','mate5','naplo'].indexOf(n)>=0);var mm=document.getElementById('maim');if(mm)mm.classList.toggle('kihagy',n!=='bent');document.querySelectorAll('.nav').forEach(function(b){b.classList.toggle('on',b.dataset.t===n)});
   ['bent','csomag','vr','ue','mate5','teendo','naplo'].forEach(function(x){document.getElementById('p-'+x).hidden=x!==n});
