@@ -512,7 +512,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
   document.documentElement.setAttribute('data-theme',t);var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',t==='dark'?'#232326':'#ffffff');}
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();tobb();}
-var AKU_VERZIO='2026-10-19 · 7';
+var AKU_VERZIO='2026-10-19 · 8';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -1119,10 +1119,10 @@ function csAll(r){
   if(dob.length>1&&n90>0&&n90<dob.length)a={kat:'reszben',t:'Részben kézbesítve '+n90+'/'+dob.length,c:'narancs'};
   else if(k===81||k===91)a={kat:vrLezart(r.sz)?'lezart':'vissza',t:k===81?'Vissza a feladónak':'Visszaérkezett hozzánk',c:'piros'};
   else if(k===90)a={kat:'kesz',t:kezCimke(r.kez),c:'zold'};
-  else if(k===59)a={kat:'elakadt',t:'Raktárban maradt',c:'piros'};
+  else if(k===59){var m59=mnapKozott(r.fel,ma);a=m59>=2?{kat:'elakadt',t:'Raktárban maradt · '+m59+' mnap',c:'piros'}:{kat:'uton',t:'Raktárban maradt',c:'sarga'};}
   else if(k===50||k===80){var mn=mnapKozott(String(r.felv||r.fel).slice(0,10),ma);
     a=mn>=((D.beall&&D.beall.elakadt)||3)?{kat:'elakadt',t:'Elakadt · '+mn+' mnap',c:'piros'}:{kat:'uton',t:k===80?'Futárnál':'Központi raktárban',c:'kek'};}
-  else{var m2=mnapKozott(r.fel,ma);a=m2>=1?{kat:'nemert',t:'Nem ért be · '+m2+' mnap',c:'sarga'}:{kat:'elok',t:'Előkészítve',c:'szurke'};}
+  else{var m2=mnapKozott(r.fel,ma);a=m2>=2?{kat:'nemert',t:'Nem ért be · '+m2+' mnap',c:'sarga'}:{kat:'elok',t:m2===1?'Előkészítve · még nem olvasták be':'Előkészítve',c:'szurke'};}
   r._a=a;return a;
 }
 function idoszak(){
