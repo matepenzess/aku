@@ -329,7 +329,7 @@ body.has-insp .abar{left:calc(50% + 110px - 180px)}
 .seg{display:flex;background:var(--field);border-radius:9px;padding:2px}.seg button{flex:1;height:30px;border:0;border-radius:7px;background:none;color:var(--tx);font-size:13px}
 .seg button.on{background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.25);font-weight:600}
 .maim.kihagy{display:none!important}
-.csakolv [onclick*="ovSzerk("],.csakolv [onclick*="cimke("],.csakolv [onclick*="apiTorol("],.csakolv [onclick*="zarasInd("],.csakolv [onclick*="vrFel"],.csakolv [onclick*="vrMent("],.csakolv [onclick*="vrUj("],.csakolv [onclick*="rkKuld("],.csakolv [onclick*="expVissza("],.csakolv [onclick*="fuMent("],.csakolv .vr,
+.csakolv [onclick*="jelLevesz("],.csakolv [onclick*="ovSzerk("],.csakolv [onclick*="cimke("],.csakolv [onclick*="apiTorol("],.csakolv [onclick*="zarasInd("],.csakolv [onclick*="vrFel"],.csakolv [onclick*="vrMent("],.csakolv [onclick*="vrUj("],.csakolv [onclick*="rkKuld("],.csakolv [onclick*="expVissza("],.csakolv [onclick*="fuMent("],.csakolv .vr,
 .csakolv .abar,.csakolv #tb-csv,.csakolv .go,.csakolv .c .a1,.csakolv .lfej .cb,.csakolv .fubox,.csakolv #mate-lezar,.csakolv .tbem,.csakolv .hd .ib[onclick^="beallit"]{display:none!important}
 @keyframes feljon{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
 @media (max-width:760px){
@@ -415,6 +415,7 @@ body.has-insp .abar{left:calc(50% + 110px - 180px)}
 .nr{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--ln);flex-wrap:wrap}.nr:last-child{border-bottom:0}
 .nra{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .kez{margin-left:5px;color:var(--acc);vertical-align:-1px;opacity:.9}
+.nincsjel{font-size:12.5px}
 </style>
 </head>
 <body>
@@ -538,7 +539,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
   document.documentElement.setAttribute('data-theme',t);var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',t==='dark'?'#232326':'#ffffff');}
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();tobb();}
-var AKU_VERZIO='2026-10-20 · 13';
+var AKU_VERZIO='2026-10-20 · 14';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -754,10 +755,20 @@ function kartya(o){
     '<div class="a4">'+tetelHtml(o,true)+(o.ragaszto?'<div class="sub rag">+ '+o.ragaszto+' db ragasztó</div>':'')+'</div>'+
     '<div class="af">'+fizJel(o)+'</div>'+
     '<div class="a5 amt">'+ft(o.osszeg)+'<div class="sub">'+esc(panelSzov(o)||'–')+'</div></div>'+
-    '<div class="a6 why">'+lepcso(o)+(f?'<span class="tg t-'+f.s+'">'+esc(f.t)+'</span>':'')+(J.length>1?'<span class="more" title="'+esc(J.slice(1).map(function(j){return j.t}).join(', '))+'">+'+(J.length-1)+'</span>':'')+'</div>'+
+    '<div class="a6 why">'+lepcso(o)+(f?'<span class="tg t-'+f.s+'">'+esc(f.t)+'</span>':'<span class="sub nincsjel">Jelzés: nincs</span>')+(J.length>1?'<span class="more" title="'+esc(J.slice(1).map(function(j){return j.t}).join(', '))+'">+'+(J.length-1)+'</span>':'')+'</div>'+
     '</div>';
 }
 // 2.17: fizetés jelzése a kártyán (címke-ellenőrzéshez)
+// Patrik tag és „exportálva” jelölés levétele (a PannonXP-ben létrehozott csomag megmarad)
+function jelLevesz(id,no){
+  modal('<h3>Jelölések levétele – '+esc(no)+'</h3><div>A Shopify rendelésről lekerül a <b>'+esc(IMPORT_TAG)+'</b> tag, és az app „exportálva” jelölése is törlődik.</div>'+
+    '<div class="note" style="margin-top:10px">A PannonXP-ben már létrehozott <b>csomag megmarad</b>. Ha a rendelés ezután is „Pannonban” állapotot mutat, az emiatt van: a csomagot a Csomagok fülön törölheted.</div>'+
+    '<div class="gombok"><button class="btn" onclick="zar()">Mégse</button><button class="btn fo" onclick="jelLeveszMehet(\''+id+'\',\''+no+'\')">Levétel</button></div>');
+}
+function jelLeveszMehet(id,no){
+  google.script.run.withSuccessHandler(function(){zar();toast('Jelölések levéve: '+esc(no),'ok',4);betolt(true);})
+    .withFailureHandler(function(e){zar();toast('Hiba: '+esc(e.message),'hiba',0)}).jelolesLevesz(KULCS,id,no);
+}
 // ===== RENDELÉS-ADATOK MÓDOSÍTÁSA (csak az appban és a Pannon-feladásban; a Shopify rendelés nem változik) =====
 var OV_E=null;
 function ovSzerk(id){
@@ -875,7 +886,8 @@ function reszlet(o){
     '<div><h4>Szállítás</h4>'+esc(o.nev)+(o.ceg?' · '+esc(o.ceg):'')+'<br>'+esc(o.irsz)+' '+esc(o.varos)+', '+esc(o.cim)+'<br>'+esc(o.tel||'–')+'<br>'+esc(o.email)+
       '<br><span class="sub">'+esc(o.szallitas)+' · '+esc(o.fizStatusz||'')+'</span>'+
       (o.ov?'<div style="margin-top:6px"><span class="tg t-lila" title="Az appban módosítva, a Shopify rendelés nem változott">Módosítva az appban: '+esc(o.ov.join(', '))+'</span></div>':'')+
-      '<div style="margin-top:8px"><button class="btn" onclick="event.stopPropagation();ovSzerk(\''+o.id+'\')">Adatok módosítása</button></div>'+
+      '<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><button class="btn" onclick="event.stopPropagation();ovSzerk(\''+o.id+'\')">Adatok módosítása</button>'+
+      ((o.karmen||exportalt(o)||pannonban(o))?'<button class="btn" onclick="event.stopPropagation();jelLevesz(\''+o.id+'\',\''+o.no+'\')">Jelölések levétele</button>':'')+'</div>'+
       (o.ujCim?'<div class="ujcim"><b class="c-r">Új cím emailben:</b><br>'+esc(o.ujCim.irsz+' '+o.ujCim.varos+', '+o.ujCim.cim)+'<br><span class="sub">Exportkor rákérdez, hogy átírja-e (csak a Pannon-fájlban).</span></div>':'')+
       '<br><a target="_blank" href="https://admin.shopify.com/store/'+esc(BOLT)+'/orders/'+esc(o.id)+'" onclick="event.stopPropagation()">Megnyitás a Shopify-ban ↗</a>'+korReszlet(o)+
       (exportalt(o)?'<div style="margin-top:10px"><button class="btn" onclick="event.stopPropagation();expVissza([\''+o.no+'\'])">Export visszavonása</button> <span class="sub">(a PXP nem fogadta el)</span></div>':'')+'</div>';
