@@ -329,7 +329,7 @@ body.has-insp .abar{left:calc(50% + 110px - 180px)}
 .seg{display:flex;background:var(--field);border-radius:9px;padding:2px}.seg button{flex:1;height:30px;border:0;border-radius:7px;background:none;color:var(--tx);font-size:13px}
 .seg button.on{background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.25);font-weight:600}
 .maim.kihagy{display:none!important}
-.csakolv [onclick*="cimke("],.csakolv [onclick*="apiTorol("],.csakolv [onclick*="zarasInd("],.csakolv [onclick*="vrFel"],.csakolv [onclick*="vrMent("],.csakolv [onclick*="vrUj("],.csakolv [onclick*="rkKuld("],.csakolv [onclick*="expVissza("],.csakolv [onclick*="fuMent("],.csakolv .vr,
+.csakolv [onclick*="ovSzerk("],.csakolv [onclick*="cimke("],.csakolv [onclick*="apiTorol("],.csakolv [onclick*="zarasInd("],.csakolv [onclick*="vrFel"],.csakolv [onclick*="vrMent("],.csakolv [onclick*="vrUj("],.csakolv [onclick*="rkKuld("],.csakolv [onclick*="expVissza("],.csakolv [onclick*="fuMent("],.csakolv .vr,
 .csakolv .abar,.csakolv #tb-csv,.csakolv .go,.csakolv .c .a1,.csakolv .lfej .cb,.csakolv .fubox,.csakolv #mate-lezar,.csakolv .tbem,.csakolv .hd .ib[onclick^="beallit"]{display:none!important}
 @keyframes feljon{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
 @media (max-width:760px){
@@ -538,7 +538,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
   document.documentElement.setAttribute('data-theme',t);var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',t==='dark'?'#232326':'#ffffff');}
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();tobb();}
-var AKU_VERZIO='2026-10-20 · 12';
+var AKU_VERZIO='2026-10-20 · 13';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -758,6 +758,29 @@ function kartya(o){
     '</div>';
 }
 // 2.17: fizetés jelzése a kártyán (címke-ellenőrzéshez)
+// ===== RENDELÉS-ADATOK MÓDOSÍTÁSA (csak az appban és a Pannon-feladásban; a Shopify rendelés nem változik) =====
+var OV_E=null;
+function ovSzerk(id){
+  google.script.run.withSuccessHandler(function(r){OV_E=r;ovModal();})
+    .withFailureHandler(function(e){toast('Hiba: '+esc(e.message),'hiba',0)}).rendelesAdatSzerk(KULCS,id);
+}
+function ovModal(){
+  var r=OV_E,mezo=function(c,i,v,extra){return '<label class="kl" for="'+i+'">'+c+'</label><input type="text" id="'+i+'" value="'+esc(v)+'" autocomplete="off"'+(extra||'')+'>';};
+  modal('<h3>'+esc(r.no)+' – adatok módosítása</h3><div class="sub">Csak az appban és a PannonXP-feladásban érvényes, a Shopify rendelés nem változik.</div>'+
+    mezo('Név','ov-nev',r.nev)+
+    '<div style="display:grid;grid-template-columns:96px 1fr;gap:10px"><div>'+mezo('Irányítószám','ov-irsz',r.irsz,' inputmode="numeric"')+'</div><div>'+mezo('Város','ov-varos',r.varos)+'</div></div>'+
+    mezo('Szállítási cím','ov-cim',r.cim)+mezo('Telefonszám','ov-tel',r.tel,' inputmode="tel"')+
+    '<label class="kl" for="ov-ref">Referenciaszám <span style="text-transform:none;letter-spacing:0;font-weight:400">(a Pannonnak megy, legfeljebb '+r.refMax+' karakter)</span></label><input type="text" id="ov-ref" maxlength="'+r.refMax+'" value="'+esc(r.ref)+'" autocomplete="off">'+
+    '<div class="sub" style="margin-top:3px">Alapértelmezett: '+esc(r.refSablon)+'</div>'+
+    '<label class="kl">Tételek (a szín módosítható)</label>'+r.tetelek.map(function(t,i){return '<div class="kcheck"><span class="sub" style="width:34px;text-align:right">'+t.db+'×</span><input type="text" id="ov-t'+i+'" value="'+esc(t.szin)+'"></div>'}).join('')+
+    '<div class="gombok">'+(r.ov?'<button class="btn" style="margin-right:auto" onclick="ovMent(true)">Alaphelyzet</button>':'')+'<button class="btn" onclick="zar()">Mégse</button><button class="btn fo" onclick="ovMent(false)">Mentés</button></div>');
+}
+function ovMent(torol){
+  var r=OV_E,g=function(i){var e=document.getElementById(i);return e?e.value:''};
+  var adat=torol?{torol:true}:{nev:g('ov-nev'),irsz:g('ov-irsz'),varos:g('ov-varos'),cim:g('ov-cim'),tel:g('ov-tel'),ref:g('ov-ref'),tetelek:r.tetelek.map(function(t,i){return g('ov-t'+i)})};
+  google.script.run.withSuccessHandler(function(x){zar();toast(torol?'Visszaállítva az eredeti adatokra.':'Módosítva (csak az appban és a Pannon-feladásban).','ok',4);betolt(false);})
+    .withFailureHandler(function(e){toast('Hiba: '+esc(e.message),'hiba',0)}).rendelesAdatMent(KULCS,r.id,adat);
+}
 // apró jelzés: a rendelést te hoztad létre kézzel (Shopify piszkozatból, pl. telefonon)
 function kezJel(o){return o.draft?'<svg class="kez" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Általad létrehozott rendelés"><title>Általad (kézzel, pl. telefonon) létrehozott rendelés</title><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4zM13.5 6.5l4 4"></path></svg>':'';}
 function fizJel(o){
@@ -851,6 +874,8 @@ function reszlet(o){
     (m?'<div><h4>Kapcsolódó email</h4>'+m+'</div>':'')+
     '<div><h4>Szállítás</h4>'+esc(o.nev)+(o.ceg?' · '+esc(o.ceg):'')+'<br>'+esc(o.irsz)+' '+esc(o.varos)+', '+esc(o.cim)+'<br>'+esc(o.tel||'–')+'<br>'+esc(o.email)+
       '<br><span class="sub">'+esc(o.szallitas)+' · '+esc(o.fizStatusz||'')+'</span>'+
+      (o.ov?'<div style="margin-top:6px"><span class="tg t-lila" title="Az appban módosítva, a Shopify rendelés nem változott">Módosítva az appban: '+esc(o.ov.join(', '))+'</span></div>':'')+
+      '<div style="margin-top:8px"><button class="btn" onclick="event.stopPropagation();ovSzerk(\''+o.id+'\')">Adatok módosítása</button></div>'+
       (o.ujCim?'<div class="ujcim"><b class="c-r">Új cím emailben:</b><br>'+esc(o.ujCim.irsz+' '+o.ujCim.varos+', '+o.ujCim.cim)+'<br><span class="sub">Exportkor rákérdez, hogy átírja-e (csak a Pannon-fájlban).</span></div>':'')+
       '<br><a target="_blank" href="https://admin.shopify.com/store/'+esc(BOLT)+'/orders/'+esc(o.id)+'" onclick="event.stopPropagation()">Megnyitás a Shopify-ban ↗</a>'+korReszlet(o)+
       (exportalt(o)?'<div style="margin-top:10px"><button class="btn" onclick="event.stopPropagation();expVissza([\''+o.no+'\'])">Export visszavonása</button> <span class="sub">(a PXP nem fogadta el)</span></div>':'')+'</div>';
