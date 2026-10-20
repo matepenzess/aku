@@ -410,6 +410,10 @@ body.has-insp .abar{left:calc(50% + 110px - 180px)}
 .lv2{margin-top:1px}.lv.uj .lv2{font-weight:600}
 .lv3{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:2px}
 .lv4{display:flex;gap:8px;align-items:center;margin-top:8px}.lv4 .btn{padding:3px 10px;font-size:12.5px}
+.nrow{cursor:pointer}.nrow:hover{background:var(--hov)}
+.nrbox{background:var(--side);border-bottom:1px solid var(--ln);padding:6px 22px 10px}
+.nr{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--ln);flex-wrap:wrap}.nr:last-child{border-bottom:0}
+.nra{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -533,7 +537,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
   document.documentElement.setAttribute('data-theme',t);var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',t==='dark'?'#232326':'#ffffff');}
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();tobb();}
-var AKU_VERZIO='2026-10-20 · 10';
+var AKU_VERZIO='2026-10-20 · 11';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -1119,7 +1123,7 @@ function unnep(){return ((D.pxp&&D.pxp.cs&&D.pxp.cs.unnep)||[]);}
 function mnapE(s){var d=dNap(s),w=d.getDay();return w>0&&w<6&&unnep().indexOf(ymd(d))<0;}
 // hány munkanap telt el tol után ig napjáig (feladás napja = 0)
 function mnapKozott(tol,ig){if(!tol||!ig)return 0;var d=dNap(tol),v=dNap(ig),n=0;while(d<v){d.setDate(d.getDate()+1);if(d<=v&&mnapE(ymd(d)))n++;}return n;}
-function csObj(a){return {sz:a[0],no:a[1],fel:a[2],nev:a[3],varos:a[4],irsz:a[5],uv:a[6],kod:a[7],felv:a[8],kez:a[9],doboz:a[10],forras:a[11],dz:a[12],tel:a[13],cim:a[14],ref:a[15],mell:a[16],email:a[17],zarva:a[18]||'',beerk:a[19]||'',fiok:a[20]||'AKSZ'};}
+function csObj(a){return {sz:a[0],no:a[1],fel:a[2],nev:a[3],varos:a[4],irsz:a[5],uv:a[6],kod:a[7],felv:a[8],kez:a[9],doboz:a[10],forras:a[11],dz:a[12],tel:a[13],cim:a[14],ref:a[15],mell:a[16],email:a[17],zarva:a[18]||'',beerk:a[19]||'',fiok:a[20]||'AKSZ',apiFriss:!!a[21],szoveg:a[22]||''};}
 function csSorok(){
   var P=D.pxp||{},L;
   if(P.cs)L=P.cs.sor.map(csObj);
@@ -1143,7 +1147,12 @@ function csAll(r){
   else if(k===59){var m59=mnapKozott(r.fel,ma);a=m59>=2?{kat:'elakadt',t:'Raktárban maradt · '+m59+' mnap',c:'piros'}:{kat:'uton',t:'Raktárban maradt',c:'sarga'};}
   else if(k===50||k===80){var mn=mnapKozott(String(r.felv||r.fel).slice(0,10),ma);
     a=mn>=((D.beall&&D.beall.elakadt)||3)?{kat:'elakadt',t:'Elakadt · '+mn+' mnap',c:'piros'}:{kat:'uton',t:k===80?'Futárnál':'Központi raktárban',c:'kek'};}
-  else{var m2=mnapKozott(r.fel,ma);a=m2>=2?{kat:'nemert',t:'Nem ért be · '+m2+' mnap',c:'sarga'}:{kat:'elok',t:m2===1?'Előkészítve · még nem olvasták be':'Előkészítve',c:'szurke'};}
+  else if(k===20||k===30||!k){
+    // „nem ért be” csak akkor, ha az állapot a PannonXP API-ból jött; a CSV-ből származó régi adat nem bizonyít semmit
+    if(!r.apiFriss)a={kat:'elok',t:'Állapot frissítése…',c:'szurke'};
+    else{var m2=mnapKozott(r.fel,ma);a=m2>=2?{kat:'nemert',t:'Nem ért be · '+m2+' mnap',c:'sarga'}:{kat:'elok',t:m2===1?'Előkészítve · még nem olvasták be':'Előkészítve',c:'szurke'};}
+  }
+  else a={kat:'uton',t:r.szoveg||('Állapot '+k),c:'kek'};   // ismeretlen állapotkód: az API saját szövegét mutatjuk, nem találgatunk
   r._a=a;return a;
 }
 function idoszak(){
@@ -1441,15 +1450,26 @@ function ueLezar(id,csendes){
 }
 
 // ===== EXPORT NAPLÓ =====
+var NAPLO_NY={};
+function naploNyit(i){NAPLO_NY[i]=!NAPLO_NY[i];rajzNaplo();}
+function naploReszlet(n){
+  var byNo={};csSorok().forEach(function(r){if(r.no)(byNo[r.no]=byNo[r.no]||[]).push(r)});
+  var ord={};((D&&D.rendelesek)||[]).forEach(function(o){ord[o.no]=o});
+  var L=n.r||n.hianyzik||[];
+  return '<div class="nrd">'+L.map(function(no){
+    var cs=byNo[no]||[],o=ord[no],nev=cs[0]?cs[0].nev:(o?o.nev:''),varos=cs[0]?cs[0].varos:(o?o.varos:'');
+    var all=cs.length?cs.map(function(c){var a=csAll(c);return '<span class="tg t-'+a.c+'">'+esc(a.t)+'</span> <span class="sub">'+esc(String(c.sz).slice(5,12))+'</span>'}).join(' '):'<span class="tg t-piros">Nincs feladva – nem jelent meg a PannonXP-ben</span>';
+    return '<div class="nr"><div><b>'+esc(no)+'</b> <span>'+esc(nev)+(varos?' · '+esc(varos):'')+'</span></div><div class="nra">'+all+'</div></div>';}).join('')+'</div>';
+}
 function rajzNaplo(){
   var N=D.naplo||[],el=document.getElementById('naplo');
   if(!N.length){el.innerHTML='<div class="empty">Még nem volt Pannon export.</div>';return;}
   el.innerHTML='<div class="tbl"><div class="tr3 h"><div>Időpont</div><div>Fájl</div><div>Rendelések</div><div>Megjelent a PannonXP-ben?</div></div>'+
-    N.map(function(n){
+    N.map(function(n,i){
       var all=n.hianyzik.length===0?'<span class="tg t-zold">✓ Mind feladva ('+n.megjelent+'/'+n.db+')</span>':
         !n.csvUtan?'<span class="tg t-szurke">Vár a következő CSV-re ('+n.megjelent+'/'+n.db+')</span>':
         '<span class="tg t-piros">Hiányzik '+n.hianyzik.length+': '+n.hianyzik.map(esc).join(', ')+'</span>';
-      return '<div class="tr3"><div class="no">'+new Date(n.ido).toLocaleString('hu-HU',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</div><div class="sub" style="word-break:break-all">'+esc(n.fajl)+'</div><div>'+n.db+' db</div><div>'+all+'</div></div>'}).join('')+'</div>';
+      return '<div class="tr3 nrow" role="button" tabindex="0" onclick="naploNyit('+i+')" onkeydown="if(event.key===\'Enter\')naploNyit('+i+')"><div class="no">'+(NAPLO_NY[i]?'▾ ':'▸ ')+new Date(n.ido).toLocaleString('hu-HU',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</div><div class="sub" style="word-break:break-all">'+esc(n.fajl)+'</div><div>'+n.db+' db</div><div>'+all+'</div></div>'+(NAPLO_NY[i]?'<div class="nrbox">'+naploReszlet(n)+'</div>':'');}).join('')+'</div>';
 }
 
 // ===== MATE KUPON =====
