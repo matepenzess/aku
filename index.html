@@ -414,6 +414,7 @@ body.has-insp .abar{left:calc(50% + 110px - 180px)}
 .nrbox{background:var(--side);border-bottom:1px solid var(--ln);padding:6px 22px 10px}
 .nr{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--ln);flex-wrap:wrap}.nr:last-child{border-bottom:0}
 .nra{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.kez{margin-left:5px;color:var(--acc);vertical-align:-1px;opacity:.9}
 </style>
 </head>
 <body>
@@ -537,7 +538,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
   document.documentElement.setAttribute('data-theme',t);var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',t==='dark'?'#232326':'#ffffff');}
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();tobb();}
-var AKU_VERZIO='2026-10-20 · 11';
+var AKU_VERZIO='2026-10-20 · 12';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -747,7 +748,7 @@ function kartya(o){
   var J=foJel(o),f=J[0],ny=AKT===o.no,piros=f&&f.s==='piros',ex=exportalt(o),pa=pannonban(o);
   return '<div class="c'+(piros?' red':pa?' exp':ex?' expv':'')+(KIJ[o.id]?' kij':'')+(ny?' akt':'')+'" onclick="nyit(\''+o.no+'\')">'+
     '<div class="a1"><input type="checkbox" class="cb" '+(KIJ[o.id]?'checked':'')+' onclick="event.stopPropagation();jelol(\''+o.id+'\',this.checked)"></div>'+
-    '<div class="a2"><div class="no">'+esc(o.no)+'</div><div class="sub">'+mikor(o.datum)+'</div>'+pxKod((o.lanc||{}).pxp)+'</div>'+
+    '<div class="a2"><div class="no">'+esc(o.no)+kezJel(o)+'</div><div class="sub">'+mikor(o.datum)+'</div>'+pxKod((o.lanc||{}).pxp)+'</div>'+
     '<div class="a3">'+esc(o.nev)+vtCimke(o)+'<div class="sub">'+esc(o.varos)+' · '+esc(o.fizetes)+'</div>'+
       (o.megjegyzes?'<div class="mj" title="'+esc(o.megjegyzes)+'">„'+esc(o.megjegyzes)+'”</div>':'')+'</div>'+
     '<div class="a4">'+tetelHtml(o,true)+(o.ragaszto?'<div class="sub rag">+ '+o.ragaszto+' db ragasztó</div>':'')+'</div>'+
@@ -757,6 +758,8 @@ function kartya(o){
     '</div>';
 }
 // 2.17: fizetés jelzése a kártyán (címke-ellenőrzéshez)
+// apró jelzés: a rendelést te hoztad létre kézzel (Shopify piszkozatból, pl. telefonon)
+function kezJel(o){return o.draft?'<svg class="kez" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Általad létrehozott rendelés"><title>Általad (kézzel, pl. telefonon) létrehozott rendelés</title><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4zM13.5 6.5l4 4"></path></svg>':'';}
 function fizJel(o){
   if(o.fizetes==='Kártya')return '<span class="tg fzk" title="Kártyával fizetve'+(o.fizStatusz==='PAID'?'':' – állapot: '+esc(o.fizStatusz||''))+'">Kártya</span>';
   if(o.fizetes==='Átutalás')return o.fizStatusz==='PAID'?'<span class="tg t-zold" title="Átutalás – fizetve">Utalás ✓</span>':'<span class="tg t-sarga" title="Átutalás – még nincs fizetve">Utalás ✗</span>';
