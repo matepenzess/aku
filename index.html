@@ -539,7 +539,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
   document.documentElement.setAttribute('data-theme',t);var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',t==='dark'?'#232326':'#ffffff');}
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();tobb();}
-var AKU_VERZIO='2026-10-20 · 14';
+var AKU_VERZIO='2026-10-23 · 15';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -552,7 +552,7 @@ function ful(n){FUL=n;var tb=document.getElementById('nav-tobb');if(tb)tb.classL
   ['bent','csomag','vr','ue','level','mate5','teendo','naplo'].forEach(function(x){document.getElementById('p-'+x).hidden=x!==n});
   document.getElementById('abar').hidden=n!=='bent'||!kijeloltek().length;window.scrollTo(0,0);rajzInsp();if(n==='teendo')tbBetolt(tbRajz);}
 function stat(n,label,cls,on,click){if(!n&&!on)return '';label=label.charAt(0).toUpperCase()+label.slice(1);return '<button class="st '+(cls||'')+(on?' on':'')+'" onclick="'+click+'"><b>'+n+'</b>'+label+'</button>';}
-var SZINEK={sonoma:'#c9a77c',pecan:'#8a5a3b',teak:'#a0764e',olive:'#6b7a4b',oliva:'#6b7a4b',black:'#1b1b1b',fekete:'#1b1b1b',white:'#f1f1ee',feher:'#f1f1ee',
+var SZINEK={anatolian:'#a8784a',natural:'#c8aa7e',marino:'#2f5469','dark stone':'#4b4b4e',darkstone:'#4b4b4e',travertin:'#d6c8aa',sonoma:'#c9a77c',pecan:'#8a5a3b',teak:'#a0764e',olive:'#6b7a4b',oliva:'#6b7a4b',black:'#1b1b1b',fekete:'#1b1b1b',white:'#f1f1ee',feher:'#f1f1ee',
   chicago:'#8d8a84',funan:'#b08a64',catania:'#b89b7a',hickory:'#7b5a3f',sandgrau:'#b9ad9a',vintage:'#a58a6a',oak:'#a58a6a',tolgy:'#a58a6a'};
 function szinPotty(nev){var n=String(nev||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
   for(var k in SZINEK)if(n.indexOf(k)>=0)return SZINEK[k];return '#777';}
