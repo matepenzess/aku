@@ -411,6 +411,7 @@ body.has-insp .abar{left:calc(50% + 110px - 180px)}
 .lv3{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:2px}
 .lv4{display:flex;gap:8px;align-items:center;margin-top:8px}.lv4 .btn{padding:3px 10px;font-size:12.5px}
 .nrow{cursor:pointer}.nrow:hover{background:var(--hov)}
+.nh{font-size:15px;font-weight:600;margin:26px 0 10px}
 .nrbox{background:var(--side);border-bottom:1px solid var(--ln);padding:6px 22px 10px}
 .nr{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--ln);flex-wrap:wrap}.nr:last-child{border-bottom:0}
 .nra{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
@@ -539,7 +540,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
   document.documentElement.setAttribute('data-theme',t);var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',t==='dark'?'#232326':'#ffffff');}
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();tobb();}
-var AKU_VERZIO='2026-10-23 · 15';
+var AKU_VERZIO='2026-10-23 · 16';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -1501,15 +1502,30 @@ function naploReszlet(n){
     var all=cs.length?cs.map(function(c){var a=csAll(c);return '<span class="tg t-'+a.c+'">'+esc(a.t)+'</span> <span class="sub">'+esc(String(c.sz).slice(5,12))+'</span>'}).join(' '):'<span class="tg t-piros">Nincs feladva – nem jelent meg a PannonXP-ben</span>';
     return '<div class="nr"><div><b>'+esc(no)+'</b> <span>'+esc(nev)+(varos?' · '+esc(varos):'')+'</span></div><div class="nra">'+all+'</div></div>';}).join('')+'</div>';
 }
+var LAP_NY={};
+function lapNyit(i){LAP_NY[i]=!LAP_NY[i];rajzNaplo();}
+function rajzLapok(){
+  var L=D.lapok||[];if(!L.length)return '<h2 class="nh">Nyomtatott lapok</h2><div class="empty">Még nincs rögzített lap. Az appból nyomtatott címkelapok és gyűjtőlisták itt jelennek meg (a myPXP webes felületén készítettek nem).</div>';
+  var byS={};csSorok().forEach(function(r){byS[r.sz]=r});
+  var ma=ymd(dNap(maNap()));
+  return '<h2 class="nh">Nyomtatott lapok</h2><div class="tbl"><div class="tr3 h"><div>Időpont</div><div>Lap</div><div>Csomagok</div><div>Állapot</div></div>'+L.map(function(l,i){
+    var cs=l.sz.map(function(z){return byS[z]}).filter(Boolean);
+    var elo=cs.filter(function(c){return !c.kod||c.kod===20||c.kod===30}).length,reg=ymd(new Date(l.ido))<ma;
+    var all=!cs.length?'<span class="tg t-szurke">Nincs adat</span>':
+      elo===cs.length?(reg?'<span class="tg t-piros">Mind csak előkészítve – lehet, hogy nem ment a futárnak</span>':'<span class="tg t-szurke">Mind előkészítve (ma nyomtatva)</span>'):
+      elo?'<span class="tg t-sarga">'+elo+'/'+cs.length+' még előkészítve</span>':'<span class="tg t-zold">✓ Mind beolvasva</span>';
+    var det=LAP_NY[i]?'<div class="nrbox"><div class="nrd">'+l.sz.map(function(z){var c=byS[z],a=c?csAll(c):null;return '<div class="nr"><div><b>'+esc(c&&c.no||'?')+'</b> <span>'+esc(c?(c.nev||'')+(c.varos?' · '+c.varos:''):'')+'</span></div><div class="nra">'+(a?'<span class="tg t-'+a.c+'">'+esc(a.t)+'</span>':'')+' <span class="sub">'+esc(String(z).slice(5,12))+'</span></div></div>'}).join('')+'</div></div>':'';
+    return '<div class="tr3 nrow" role="button" tabindex="0" onclick="lapNyit('+i+')" onkeydown="if(event.key===\'Enter\')lapNyit('+i+')"><div class="no">'+(LAP_NY[i]?'▾ ':'▸ ')+new Date(l.ido).toLocaleString('hu-HU',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</div><div class="sub">'+(l.tip==='zaras'?'Gyűjtőlista':'Címkelap')+' · '+esc(l.fiok)+'</div><div>'+l.sz.length+' db</div><div>'+all+'</div></div>'+det;}).join('')+'</div>';
+}
 function rajzNaplo(){
   var N=D.naplo||[],el=document.getElementById('naplo');
-  if(!N.length){el.innerHTML='<div class="empty">Még nem volt Pannon export.</div>';return;}
+  if(!N.length){el.innerHTML='<div class="empty">Még nem volt Pannon export.</div>'+rajzLapok();return;}
   el.innerHTML='<div class="tbl"><div class="tr3 h"><div>Időpont</div><div>Fájl</div><div>Rendelések</div><div>Megjelent a PannonXP-ben?</div></div>'+
     N.map(function(n,i){
       var all=n.hianyzik.length===0?'<span class="tg t-zold">✓ Mind feladva ('+n.megjelent+'/'+n.db+')</span>':
         !n.csvUtan?'<span class="tg t-szurke">Vár a következő CSV-re ('+n.megjelent+'/'+n.db+')</span>':
         '<span class="tg t-piros">Hiányzik '+n.hianyzik.length+': '+n.hianyzik.map(esc).join(', ')+'</span>';
-      return '<div class="tr3 nrow" role="button" tabindex="0" onclick="naploNyit('+i+')" onkeydown="if(event.key===\'Enter\')naploNyit('+i+')"><div class="no">'+(NAPLO_NY[i]?'▾ ':'▸ ')+new Date(n.ido).toLocaleString('hu-HU',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</div><div class="sub" style="word-break:break-all">'+esc(n.fajl)+'</div><div>'+n.db+' db</div><div>'+all+'</div></div>'+(NAPLO_NY[i]?'<div class="nrbox">'+naploReszlet(n)+'</div>':'');}).join('')+'</div>';
+      return '<div class="tr3 nrow" role="button" tabindex="0" onclick="naploNyit('+i+')" onkeydown="if(event.key===\'Enter\')naploNyit('+i+')"><div class="no">'+(NAPLO_NY[i]?'▾ ':'▸ ')+new Date(n.ido).toLocaleString('hu-HU',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</div><div class="sub" style="word-break:break-all">'+esc(n.fajl)+'</div><div>'+n.db+' db</div><div>'+all+'</div></div>'+(NAPLO_NY[i]?'<div class="nrbox">'+naploReszlet(n)+'</div>':'');}).join('')+'</div>'+rajzLapok();
 }
 
 // ===== MATE KUPON =====
