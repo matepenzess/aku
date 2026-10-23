@@ -329,7 +329,7 @@ body.has-insp .abar{left:calc(50% + 110px - 180px)}
 .seg{display:flex;background:var(--field);border-radius:9px;padding:2px}.seg button{flex:1;height:30px;border:0;border-radius:7px;background:none;color:var(--tx);font-size:13px}
 .seg button.on{background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.25);font-weight:600}
 .maim.kihagy{display:none!important}
-.csakolv [onclick*="jelLevesz("],.csakolv [onclick*="ovSzerk("],.csakolv [onclick*="cimke("],.csakolv [onclick*="apiTorol("],.csakolv [onclick*="zarasInd("],.csakolv [onclick*="vrFel"],.csakolv [onclick*="vrMent("],.csakolv [onclick*="vrUj("],.csakolv [onclick*="rkKuld("],.csakolv [onclick*="expVissza("],.csakolv [onclick*="fuMent("],.csakolv .vr,
+.csakolv [onclick*="jelLevesz("],.csakolv [onclick*="ovSzerk("],.csakolv [onclick*="cimke("],.csakolv [onclick*="maiCimkek("],.csakolv [onclick*="apiTorol("],.csakolv [onclick*="zarasInd("],.csakolv [onclick*="vrFel"],.csakolv [onclick*="vrMent("],.csakolv [onclick*="vrUj("],.csakolv [onclick*="rkKuld("],.csakolv [onclick*="expVissza("],.csakolv [onclick*="fuMent("],.csakolv .vr,
 .csakolv .abar,.csakolv #tb-csv,.csakolv .go,.csakolv .c .a1,.csakolv .lfej .cb,.csakolv .fubox,.csakolv #mate-lezar,.csakolv .tbem,.csakolv .hd .ib[onclick^="beallit"]{display:none!important}
 @keyframes feljon{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
 @media (max-width:760px){
@@ -540,7 +540,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
   document.documentElement.setAttribute('data-theme',t);var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',t==='dark'?'#232326':'#ffffff');}
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();tobb();}
-var AKU_VERZIO='2026-10-23 · 16';
+var AKU_VERZIO='2026-10-23 · 17';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -1126,10 +1126,16 @@ function apiEredmeny(r){if(!r||!r.vissza&&window.AK&&AK.ok.length&&r===window.AE
     '<button class="btn fo" onclick="zar()">Bezár</button></div>';
   modal(h,true);
 }
+function maiCimkek(){
+  var ma=maNap(),sz=csSorok().filter(function(r){return r.fel===ma&&(!r.kod||r.kod<50)&&(r.fiok||'AKSZ')===(D.beall&&D.beall.fiok||'NGYR')}).map(function(r){return r.sz});
+  if(!sz.length)return toast('Ma nincs feladott, még nem felvett csomag.','hiba',4);
+  if(sz.length>100)sz=sz.slice(0,100);
+  cimke(sz,'maicimke');
+}
 function cimke(szk,gomb){
   var b=document.getElementById(gomb);if(b){b.disabled=true;b.textContent='PDF készül…';}
   google.script.run.withSuccessHandler(function(f){
-    if(b)b.outerHTML='<a class="btn fo" target="_blank" href="'+esc(f.url)+'">Címke PDF megnyitása ↗</a>'+(f.tobb||[]).map(function(t){return ' <a class="btn fo" target="_blank" href="'+esc(t.url)+'">Címke PDF ('+esc(t.fiok)+') ↗</a>'}).join('');window.open(f.url,'_blank');
+    if(b)b.outerHTML='<a class="btn fo" target="_blank" href="'+esc(f.url)+'">Címke PDF megnyitása ↗</a>'+(f.tobb||[]).map(function(t){return ' <a class="btn fo" target="_blank" href="'+esc(t.url)+'">Címke PDF ('+esc(t.fiok)+') ↗</a>'}).join('');window.open(f.url,'_blank');if(f.figy)toast(esc(f.figy),'hiba',0);else if(f.oldal)toast('Címke PDF kész: '+f.cimke+' címke, '+f.oldal+' oldal.','ok',5);
   }).withFailureHandler(function(e){if(b){b.disabled=false;b.textContent='Címke PDF';}toast('Címke hiba: '+esc(e.message),'hiba',0);}).cimkeNyomtat(KULCS,szk,CKEZD);
 }
 function apiTorol(sz,utana){
@@ -1258,7 +1264,7 @@ function rajzCsomag(){
     '<span class="sub" style="margin-left:auto">'+I.tol.slice(5).replace('-','.')+'. – '+I.ig.slice(5).replace('-','.')+'.</span>'+
     '<label style="display:flex;gap:6px;align-items:center;font-size:12.5px;cursor:pointer;margin-left:10px"><input type="checkbox" class="cb" '+(NAPBONT?'checked':'')+' onchange="napBont()"> Napokra bontva</label>'+
     '<button class="st plain" style="margin-left:6px" onclick="csStatKapcs()">Statisztika '+(CS_STAT?'▾':'▸')+'</button>'+
-    (P.naplo?'<button class="btn" style="margin-left:10px" onclick="zarasInd()">Napi zárás</button>':'');
+    (P.naplo?'<button class="btn" style="margin-left:10px" id="maicimke" onclick="maiCimkek()">Mai csomagok címkéi</button><button class="btn" style="margin-left:6px" onclick="zarasInd()">Napi zárás</button>':'');
   // sorok
   var q=qErt('q2'),T;
   if(q)T=L.filter(function(r){return talal([r.no,r.nev,r.varos,r.irsz,r.sz,String(r.sz).slice(5,12),r.ref],[r.tel],q)});
