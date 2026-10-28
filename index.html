@@ -412,6 +412,7 @@ body.has-insp .abar{left:calc(50% + 110px - 180px)}
 .lv4{display:flex;gap:8px;align-items:center;margin-top:8px}.lv4 .btn{padding:3px 10px;font-size:12.5px}
 .nrow{cursor:pointer}.nrow:hover{background:var(--hov)}
 .zstop{position:fixed;top:10px;right:16px;z-index:60;padding:6px 12px;border-radius:999px;border:1px solid var(--bd,#d2d2d7);background:var(--bg,#fff);color:inherit;font:inherit;font-size:12px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.12);-webkit-app-region:no-drag}.zstop:hover{background:var(--rb,#f5f5f7)}
+.tema-sb{display:flex;margin-top:8px;font-size:11px}.tema-sb button{flex:1;padding:4px 2px}
 .nh{font-size:15px;font-weight:600;margin:26px 0 10px}
 .nrbox{background:var(--side);border-bottom:1px solid var(--ln);padding:6px 22px 10px}
 .nr{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--ln);flex-wrap:wrap}.nr:last-child{border-bottom:0}
@@ -435,7 +436,7 @@ body.has-insp .abar{left:calc(50% + 110px - 180px)}
   <button class="nav" data-t="naplo" onclick="ful('naplo')"><svg class="ni" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg><span class="nl">Export napló</span></button>
   <div class="fel" id="fel"></div>
   <div class="mai" id="mai"></div>
-  <div class="sidefoot"><span id="upd">Betöltés…</span></div>
+  <div class="sidefoot"><span id="upd">Betöltés…</span><div class="seg tema-sb" id="tema-sb" hidden></div></div>
   <div class="proba" id="proba" hidden title="Az AKU 2.0 csak olvas és CSV-t készít. A Shopify-ban és a PannonXP-ben semmi sem változik.">Próba mód · csak olvas</div>
 </aside>
 
@@ -541,8 +542,9 @@ var TEMA_PREF='system';try{TEMA_PREF=localStorage.getItem('tema3')||'system'}cat
 function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEMA_PREF==='system'?(m.matches?'dark':'light'):TEMA_PREF;
   document.documentElement.setAttribute('data-theme',t);var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',t==='dark'?'#232326':'#ffffff');}
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
-function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();tobb();}
-var AKU_VERZIO='2026-10-23 · 19';
+function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
+function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
+var AKU_VERZIO='2026-10-28 · 20';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -1827,7 +1829,7 @@ google.script.run.withSuccessHandler(function(i){BOLT=i.bolt||'';PROBA=!!i.csakO
   .withFailureHandler(function(){}).appInfo(KULCS);
 // ===== EMAILEK: a megválaszolatlan bejövő levelek (csak olvas) =====
 var LV=null,LV_HIBA='',LV_L=[];
-if(window.AKU_WEB)document.body.classList.add('web');   // az Emailek fül csak a telefonos (webes) változatban van
+if(window.AKU_WEB){document.body.classList.add('web');temaSb();}   // az Emailek fül csak a telefonos (webes) változatban van
 function levelBetolt(){
   if(!window.AKU_WEB)return;
   google.script.run.withSuccessHandler(function(r){LV=r||[];LV_HIBA='';levelSzam();rajzLevel();})
