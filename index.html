@@ -88,7 +88,7 @@ main{flex:1;min-width:0;padding:20px 26px 90px}
 .go{margin-left:auto;text-transform:none;letter-spacing:0;background:var(--acc);color:var(--accTx);border:0;border-radius:9px;padding:6px 12px;font-size:12.5px;font-weight:600;display:inline-flex;gap:7px;align-items:center}
 .pl{width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#ffa24c,#f2661b);color:#fff;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
 /* rendelés kártya */
-.c{display:grid;grid-template-columns:20px 96px minmax(130px,1.1fr) minmax(150px,1.5fr) 84px 110px minmax(220px,1.6fr);gap:14px;align-items:center;background:var(--card);border:1px solid var(--ln);border-radius:11px;padding:11px 14px;margin-bottom:6px;cursor:pointer}
+.c{display:grid;grid-template-columns:20px 104px minmax(130px,1.1fr) minmax(150px,1.5fr) 84px 110px minmax(220px,1.6fr);gap:14px;align-items:center;background:var(--card);border:1px solid var(--ln);border-radius:11px;padding:11px 14px;margin-bottom:6px;cursor:pointer}
 .c:hover{border-color:var(--ln2)}.c.red{border-color:var(--redln);background:linear-gradient(90deg,var(--redbg),var(--card) 45%)}
 .c.kij{outline:1.5px solid var(--acc);outline-offset:-1px}.c.halv{opacity:.62}
 .c.exp{border-color:var(--gexpl);background:var(--gexp)}.c.exp:hover{border-color:var(--g)}
@@ -257,7 +257,8 @@ section>.hd+*{margin-top:12px}
 .lfej .sort{border:0;background:none;color:var(--mu)}
 .go{background:var(--field);color:var(--tx);border-radius:7px}
 .c{background:none;border:0;border-bottom:1px solid var(--ln);border-radius:0;margin:0;padding:7px 22px;gap:12px;min-height:50px;
-  grid-template-columns:22px 78px minmax(110px,1fr) minmax(120px,1.2fr) 74px 92px minmax(120px,.9fr)}
+  grid-template-columns:22px 104px minmax(110px,1fr) minmax(120px,1.2fr) 74px 92px minmax(120px,.9fr)}
+.c>*{min-width:0}
 .c:hover{background:var(--hov);border-color:var(--ln)}
 .c.red{background:var(--redbg);box-shadow:inset 5px 0 0 var(--r)}
 .c.exp{background:var(--gexp);box-shadow:inset 5px 0 0 var(--g)}
@@ -544,7 +545,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
-var AKU_VERZIO='2026-10-28 · 20';
+var AKU_VERZIO='2026-10-29 · 21';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
