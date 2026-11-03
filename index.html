@@ -545,7 +545,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
-var AKU_VERZIO='2026-11-03 · 22';
+var AKU_VERZIO='2026-11-03 · 23';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -1283,7 +1283,7 @@ function rajzCsomag(){
   var h='<div class="cswrap"><table class="cst"><tr>'+th('fel','Feladva')+th('sz','Csomag')+th('no','Rend.')+th('nev','Címzett')+th('varos','Település')+th('uv','Utánvét',1)+th('all','Állapot')+'</tr>';
   var sorHtml=function(r){var a=csAll(r);
     return '<tr class="sor" onclick="csNyit(\''+r.sz+'\')"><td>'+esc(String(r.fel).slice(5).replace('-','.'))+'.</td><td>'+pxKod(String(r.sz).slice(5,12))+'</td><td class="no">'+esc(r.no||'–')+'</td><td>'+esc(r.nev)+'</td><td>'+esc(r.varos)+'</td>'+
-      '<td class="r">'+(r.uv?ft(r.uv):'–')+'</td><td><span class="tg t-'+a.c+'">'+esc(a.t)+'</span>'+(/^#1/.test(r.no)?'<span class="tg t-szurke">kis bolt</span>':'')+
+      '<td class="r">'+(r.uv?ft(r.uv):'–')+'</td><td><span class="tg t-'+a.c+'">'+esc(a.t)+'</span>'+(/^#1\d{3}$/.test(r.no)?'<span class="tg t-szurke">kis bolt</span>':'')+
       (r.forras==='myPXP'?'<span class="tg t-szurke">myPXP</span>':'')+(r.doboz>1?'<span class="tg t-szurke">'+r.doboz+' doboz</span>':'')+'</td></tr>'+(NYC[r.sz]?'<tr class="csdet"><td colspan="7">'+csDet(r)+'</td></tr>':'');};
   if(!T.length)h+='<tr><td colspan="7" class="sub" style="padding:20px;text-align:center">Nincs ilyen csomag.</td></tr>';
   else if(NAPBONT&&!q){
@@ -1314,7 +1314,7 @@ function csDet(r){
   var x=((D.pxp&&D.pxp.lista)||[]).filter(function(y){return y.sz===r.sz})[0]||{};
   var dz={};try{dz=r.dz?JSON.parse(r.dz):{}}catch(e){}
   var mell=String(r.mell||'').split(' ').filter(String);
-  var shop=r.no&&/^#[2-9]/.test(r.no)?'<a target="_blank" onclick="event.stopPropagation()" href="https://admin.shopify.com/store/'+esc(BOLT)+'/orders?query='+encodeURIComponent(r.no.slice(1))+'">Megnyitás a Shopify-ban ↗</a>':'<span class="sub">Kis bolt / nincs Shopify-rendelés</span>';
+  var shop=r.no&&/^#([2-9]|1\d{4})/.test(r.no)?'<a target="_blank" onclick="event.stopPropagation()" href="https://admin.shopify.com/store/'+esc(BOLT)+'/orders?query='+encodeURIComponent(r.no.slice(1))+'">Megnyitás a Shopify-ban ↗</a>':'<span class="sub">Kis bolt / nincs Shopify-rendelés</span>';
   return '<div class="k2det" style="border:0;margin:0;padding:6px 0" onclick="event.stopPropagation()">'+
     '<div><h4>Címzett</h4>'+esc(r.nev)+'<br>'+esc((r.irsz||'')+' '+(r.varos||''))+(r.cim?', '+esc(r.cim):'')+'<br>'+(r.tel?esc(r.tel):'–')+(r.email?'<br>'+esc(r.email):'')+'<div style="margin-top:8px">'+shop+'</div></div>'+
     '<div><h4>Csomag</h4>'+pxKod(String(r.sz).slice(5,12))+' <span class="sub">'+esc(r.sz)+'</span><br>'+esc(r.ref||'')+'<br>'+r.doboz+' doboz'+(r.uv?' · utánvét '+ft(r.uv):'')+
