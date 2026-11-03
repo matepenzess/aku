@@ -545,7 +545,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
-var AKU_VERZIO='2026-10-29 · 21';
+var AKU_VERZIO='2026-11-03 · 22';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -786,7 +786,7 @@ function ovModal(){
   modal('<h3>'+esc(r.no)+' – adatok módosítása</h3><div class="sub">Csak az appban és a PannonXP-feladásban érvényes, a Shopify rendelés nem változik.</div>'+
     mezo('Név','ov-nev',r.nev)+
     '<div style="display:grid;grid-template-columns:96px 1fr;gap:10px"><div>'+mezo('Irányítószám','ov-irsz',r.irsz,' inputmode="numeric"')+'</div><div>'+mezo('Város','ov-varos',r.varos)+'</div></div>'+
-    mezo('Szállítási cím','ov-cim',r.cim)+mezo('Telefonszám','ov-tel',r.tel,' inputmode="tel"')+
+    mezo('Szállítási cím','ov-cim',r.cim)+mezo('Telefonszám','ov-tel',r.tel,' inputmode="tel"')+mezo('Email','ov-email',r.email,' inputmode="email"')+
     '<label class="kl" for="ov-ref">Referenciaszám <span style="text-transform:none;letter-spacing:0;font-weight:400">(a Pannonnak megy, legfeljebb '+r.refMax+' karakter)</span></label><input type="text" id="ov-ref" maxlength="'+r.refMax+'" value="'+esc(r.ref)+'" autocomplete="off">'+
     '<div class="sub" style="margin-top:3px">Alapértelmezett: '+esc(r.refSablon)+'</div>'+
     '<label class="kl">Tételek (a szín módosítható)</label>'+r.tetelek.map(function(t,i){return '<div class="kcheck"><span class="sub" style="width:34px;text-align:right">'+t.db+'×</span><input type="text" id="ov-t'+i+'" value="'+esc(t.szin)+'"></div>'}).join('')+
@@ -794,7 +794,7 @@ function ovModal(){
 }
 function ovMent(torol){
   var r=OV_E,g=function(i){var e=document.getElementById(i);return e?e.value:''};
-  var adat=torol?{torol:true}:{nev:g('ov-nev'),irsz:g('ov-irsz'),varos:g('ov-varos'),cim:g('ov-cim'),tel:g('ov-tel'),ref:g('ov-ref'),tetelek:r.tetelek.map(function(t,i){return g('ov-t'+i)})};
+  var adat=torol?{torol:true}:{nev:g('ov-nev'),irsz:g('ov-irsz'),varos:g('ov-varos'),cim:g('ov-cim'),tel:g('ov-tel'),email:g('ov-email'),ref:g('ov-ref'),tetelek:r.tetelek.map(function(t,i){return g('ov-t'+i)})};
   google.script.run.withSuccessHandler(function(x){zar();toast(torol?'Visszaállítva az eredeti adatokra.':'Módosítva (csak az appban és a Pannon-feladásban).','ok',4);betolt(false);})
     .withFailureHandler(function(e){toast('Hiba: '+esc(e.message),'hiba',0)}).rendelesAdatMent(KULCS,r.id,adat);
 }
