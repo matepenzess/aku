@@ -545,7 +545,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
-var AKU_VERZIO='2026-11-03 · 23';
+var AKU_VERZIO='2026-11-05 · 24';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -968,8 +968,8 @@ function futtat(t,ertesit,idk){
     var link=r.url?'<div style="margin-top:10px"><a target="_blank" href="'+esc(r.letolt)+'">⬇ Letöltés</a> · <a target="_blank" href="'+esc(r.url)+'">Megnyitás a Drive-ban</a></div>':'';
     var hib=(r.hibak&&r.hibak.length)?'<div class="note err" style="margin-top:8px">'+r.hibak.map(esc).join('<br>')+'</div>':'';
     var kih=t==='fulfill'&&window.FF&&FF.kihagy?' '+FF.kihagy+' kihagyva (nincs feladva).':'';
-    modal('<h3>'+(r.ok?'Kész':'Figyelem')+'</h3><div>'+esc(r.uzenet)+kih+'</div>'+link+hib+'<div class="gombok"><button class="btn fo" onclick="zar()">Rendben</button></div>');
-    if(r.ok&&t==='fulfill'){zar();kigurul();}
+    if(r.ok&&t==='fulfill'){zar();toast('<b>✓ '+esc(r.uzenet)+kih+'</b>','ok',6);kigurul();}   // sikeres teljesítés: nem kell külön ablak
+    else modal('<h3>'+(r.ok?'Kész':'Figyelem')+'</h3><div>'+esc(r.uzenet)+kih+'</div>'+link+hib+'<div class="gombok"><button class="btn fo" onclick="zar()">Rendben</button></div>');
     if(r.ok&&(t==='fulfill'||t==='paid'||t==='karmen')){KIJ={};betolt(false);}
   }).withFailureHandler(function(e){
     modal('<h3>Hiba</h3><div>'+esc(e.message)+'</div><div class="gombok"><button class="btn" onclick="zar()">Bezár</button></div>');
