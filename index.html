@@ -515,7 +515,7 @@ body.has-insp .abar{left:calc(50% + 110px - 180px)}
   <button class="n" id="kij-db" onclick="kijLista()" title="Kijelöltek listája – egyenként kivehetők" style="opacity:1;font-weight:600"></button>
   <button class="p" onclick="akcio('pannonapi')" title="Feladás közvetlenül a PannonXP-be (ÉLES)"><span class="pl">P</span>Pannon API</button>
   <button onclick="akcio('pannon')" title="PannonXP import fájl (CSV) – tartalék">Pannon CSV (tartalék)</button>
-  <button onclick="akcio('karmen')" title="Patrik tag = beimportálva (NGYR)">Patrik tag</button>
+  <button id="tagbtn" onclick="akcio('karmen')" title="Pabu tag = beimportálva">Pabu tag</button>
   <button onclick="akcio('fulfill')">Teljesítés</button>
   <button onclick="akcio('paid')">Fizetett</button>
   <button onclick="KIJ={};rajzBent()" title="Minden kijelölés törlése">✕ Mind</button>
@@ -545,7 +545,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
-var AKU_VERZIO='2026-11-05 · 24';
+var AKU_VERZIO='2026-11-05 · 25';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -638,7 +638,7 @@ var LAST=0;
 function frissitHaRegi(ms){if(D&&Date.now()-LAST>ms&&!document.querySelector('.refresh:disabled'))betolt(false);}
 function betolt(kezi){
   document.querySelectorAll('.refresh').forEach(function(b){b.disabled=true});
-  google.script.run.withSuccessHandler(function(d){if(d.ue==null&&D&&D.ue)d.ue=D.ue;var kellUe=!d.ue||d.ue===D_UE_REGI;D=d;LAST=Date.now();dCacheMent(d);levelBetolt();document.querySelectorAll('.refresh').forEach(function(b){b.disabled=false});rajz();})
+  google.script.run.withSuccessHandler(function(d){if(d.ue==null&&D&&D.ue)d.ue=D.ue;var kellUe=!d.ue||d.ue===D_UE_REGI;D=d;LAST=Date.now();if(d.beall&&d.beall.tag){IMPORT_TAG=d.beall.tag;var tb=document.getElementById('tagbtn');if(tb){tb.textContent=IMPORT_TAG+' tag';tb.title=IMPORT_TAG+' tag = beimportálva';}}dCacheMent(d);levelBetolt();document.querySelectorAll('.refresh').forEach(function(b){b.disabled=false});rajz();})
    .withFailureHandler(function(e){document.querySelectorAll('.refresh').forEach(function(b){b.disabled=false});document.getElementById('msg').innerHTML='<div class="note err">Hiba: '+esc(e.message)+'</div>';})
    .getData(KULCS,!!kezi);
 }
@@ -676,7 +676,7 @@ var SAJAT_NYIT=false;try{SAJAT_NYIT=localStorage.getItem('sajat')==='1'}catch(e)
 function sajatKapcs(){SAJAT_NYIT=!SAJAT_NYIT;try{localStorage.setItem('sajat',SAJAT_NYIT?'1':'0')}catch(e){}rajzBent();}
 var FAGY_NYIT=false;try{FAGY_NYIT=localStorage.getItem('fagy')==='1'}catch(e){}
 function fagyKapcs(){FAGY_NYIT=!FAGY_NYIT;try{localStorage.setItem('fagy',FAGY_NYIT?'1':'0')}catch(e){}rajzBent();}
-var IMPORT_TAG='Patrik';
+var IMPORT_TAG='Pabu';
 var BESZ_NYIT=false;try{BESZ_NYIT=localStorage.getItem('besz')==='1'}catch(e){}
 function beszKapcs(){BESZ_NYIT=!BESZ_NYIT;try{localStorage.setItem('besz',BESZ_NYIT?'1':'0')}catch(e){}rajzBent();}
 var UTEM_NYIT=false;try{UTEM_NYIT=localStorage.getItem('utem')==='1'}catch(e){}
