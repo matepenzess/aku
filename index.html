@@ -105,7 +105,7 @@ main{flex:1;min-width:0;padding:20px 26px 90px}
 .c-db{position:absolute;right:0;top:0;font-size:11px;font-weight:700;color:var(--accTx);background:var(--acc);border-radius:9px;padding:0 7px;z-index:20}
 .vt{display:inline-block;font-size:10.5px;font-weight:600;padding:0 6px;margin-left:6px;border-radius:9px;border:1px solid var(--ln2);color:var(--mu2);background:none;cursor:pointer;vertical-align:1px;line-height:16px}
 .vt:hover{color:var(--hi);border-color:var(--mu)}.vt.gy{color:var(--r);border-color:var(--rl);background:var(--rb)}
-.mj{font-size:12px;color:var(--a);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.mj{font-size:12px;color:var(--a);margin-top:2px;white-space:normal;word-break:break-word;max-width:100%}
 .lfej{display:flex;align-items:center;gap:10px;margin:14px 0 8px;font-size:12px;color:var(--mu2);flex-wrap:wrap}
 .lfej .sort{background:none;border:1px solid var(--ln2);border-radius:8px;padding:3px 9px;color:var(--mu2);font-size:12px}
 .st.gz b{color:var(--g)}.st.sep{padding:0;width:1px;height:16px;background:var(--ln2);border:0;align-self:center}
@@ -331,6 +331,7 @@ body.has-insp .abar{left:calc(50% + 110px - 180px)}
 .seg button.on{background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.25);font-weight:600}
 .maim.kihagy{display:none!important}
 .csakolv [onclick*="jelLevesz("],.csakolv [onclick*="ovSzerk("],.csakolv [onclick*="cimke("],.csakolv [onclick*="maiCimkek("],.csakolv [onclick*="apiTorol("],.csakolv [onclick*="zarasInd("],.csakolv [onclick*="vrFel"],.csakolv [onclick*="vrMent("],.csakolv [onclick*="vrUj("],.csakolv [onclick*="rkKuld("],.csakolv [onclick*="expVissza("],.csakolv [onclick*="fuMent("],.csakolv .vr,
+.kollega .nav[data-t="mate5"],.kollega #p-mate5,.kollega .tobb-l [onclick*="mate5"]{display:none!important}
 .csakolv .abar,.csakolv #tb-csv,.csakolv .go,.csakolv .c .a1,.csakolv .lfej .cb,.csakolv .fubox,.csakolv #mate-lezar,.csakolv .tbem,.csakolv .hd .ib[onclick^="beallit"]{display:none!important}
 @keyframes feljon{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
 @media (max-width:760px){
@@ -545,7 +546,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
-var AKU_VERZIO='2026-11-05 · 25';
+var AKU_VERZIO='2026-11-10 · 26';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -717,7 +718,7 @@ function rajzBent(){
   var q=qErt('q'),U=[],FZ=[],SJ=[],BS=[];
   // keresésnél minden rendelésben keres (szűrőtől függetlenül); különben az ütemezettek külön részbe kerülnek
   var L=R.filter(function(o){
-    if(q)return talal([o.no,o.nev,o.ceg,o.varos,o.irsz,o.cim,o.email,o.megjegyzes].concat(o.tetelek.map(function(x){return x.szin})),[o.tel],q);
+    if(q)return talal([o.no,o.nev,o.ceg,o.varos,o.irsz,o.cim,o.email,o.megjegyzes].concat(o.attr||[]).concat(o.tetelek.map(function(x){return x.szin})),[o.tel],q);
     if(!SZ_F[SZURO](o))return false;
     if(SZURO!=='fagy'&&o.fagy){FZ.push(o);return false;}
     if(SZURO!=='sajat'&&o.sajat){SJ.push(o);return false;}
@@ -757,7 +758,7 @@ function kartya(o){
     '<div class="a1"><input type="checkbox" class="cb" '+(KIJ[o.id]?'checked':'')+' onclick="event.stopPropagation();jelol(\''+o.id+'\',this.checked)"></div>'+
     '<div class="a2"><div class="no">'+esc(o.no)+kezJel(o)+'</div><div class="sub">'+mikor(o.datum)+'</div>'+pxKod((o.lanc||{}).pxp)+'</div>'+
     '<div class="a3">'+esc(o.nev)+vtCimke(o)+'<div class="sub">'+esc(o.varos)+' · '+esc(o.fizetes)+'</div>'+
-      (o.megjegyzes?'<div class="mj" title="'+esc(o.megjegyzes)+'">„'+esc(o.megjegyzes)+'”</div>':'')+'</div>'+
+      (o.megjegyzes?'<div class="mj">„'+esc(o.megjegyzes)+'”</div>':'')+((o.attr&&o.attr.length)?'<div class="mj">'+o.attr.map(esc).join(' · ')+'</div>':'')+'</div>'+
     '<div class="a4">'+tetelHtml(o,true)+(o.ragaszto?'<div class="sub rag">+ '+o.ragaszto+' db ragasztó</div>':'')+'</div>'+
     '<div class="af">'+fizJel(o)+'</div>'+
     '<div class="a5 amt">'+ft(o.osszeg)+'<div class="sub">'+esc(panelSzov(o)||'–')+'</div></div>'+
@@ -886,7 +887,7 @@ function reszlet(o){
   var J=foJel(o).filter(function(j){return !/^✉/.test(j.t)});
   return '<div><h4>Feladás állapota</h4>'+lanc(o)+'<h4 style="margin-top:14px">Tételek</h4>'+tetelHtml(o,false)+'<div class="sub" style="margin-top:4px">Ragasztó: '+o.ragaszto+' db</div></div>'+
     '<div><h4>Jelzések</h4>'+(J.map(function(j){return '<span class="tg t-'+j.s+'" style="margin:0 4px 4px 0">'+esc(j.t)+'</span>'}).join('')||'<span class="sub">Nincs.</span>')+
-      (o.megjegyzes?'<h4 style="margin-top:12px">Megjegyzés</h4>'+esc(o.megjegyzes):'')+
+      (o.megjegyzes?'<h4 style="margin-top:12px">Megjegyzés</h4><div style="white-space:pre-wrap">'+esc(o.megjegyzes)+'</div>':'')+((o.attr&&o.attr.length)?'<h4 style="margin-top:12px">További részletek</h4><div style="white-space:pre-wrap">'+o.attr.map(esc).join('\n')+'</div>':'')+
       (o.kuponok.length?'<h4 style="margin-top:12px">Kupon</h4>'+o.kuponok.map(esc).join(', '):'')+fuDoboz(o)+'</div>'+
     (m?'<div><h4>Kapcsolódó email</h4>'+m+'</div>':'')+
     '<div><h4>Szállítás</h4>'+esc(o.nev)+(o.ceg?' · '+esc(o.ceg):'')+'<br>'+esc(o.irsz)+' '+esc(o.varos)+', '+esc(o.cim)+'<br>'+esc(o.tel||'–')+'<br>'+esc(o.email)+
@@ -1826,7 +1827,7 @@ function tbEmailKartya(i){
     lista:/vissza/.test(low)?TB_FOLY.map(function(t){return {t:t,k:false}}):[],email:{id:m.id,targy:m.targy,felado:m.felado,datum:m.datum,link:'https://mail.google.com/mail/u/0/#all/'+m.id}});
 }
 tbBetolt(function(){tbSzam();tbRajz();});
-google.script.run.withSuccessHandler(function(i){BOLT=i.bolt||'';PROBA=!!i.csakOlvas;if(i.jog==='telefon')document.body.classList.add('csakolv');var f=document.getElementById('proba');if(f)f.hidden=!PROBA;})
+google.script.run.withSuccessHandler(function(i){BOLT=i.bolt||'';PROBA=!!i.csakOlvas;if(i.jog==='telefon')document.body.classList.add('csakolv');if(i.jog==='kollega')document.body.classList.add('kollega');var f=document.getElementById('proba');if(f)f.hidden=!PROBA;})
   .withFailureHandler(function(){}).appInfo(KULCS);
 // ===== EMAILEK: a megválaszolatlan bejövő levelek (csak olvas) =====
 var LV=null,LV_HIBA='',LV_L=[];
