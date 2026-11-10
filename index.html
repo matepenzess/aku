@@ -546,7 +546,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
-var AKU_VERZIO='2026-11-10 · 26';
+var AKU_VERZIO='2026-11-10 · 28';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -637,9 +637,12 @@ function dCacheMent(d){try{var s=JSON.stringify(d);if(s.length<3500000)localStor
 function dCacheOlvas(){try{var j=JSON.parse(localStorage.getItem('aku_d')||'null');if(j&&j.d&&j.d.rendelesek&&Date.now()-j.t<864e5)return j;}catch(e){}return null;}
 var LAST=0;
 function frissitHaRegi(ms){if(D&&Date.now()-LAST>ms&&!document.querySelector('.refresh:disabled'))betolt(false);}
+var TELJ={};   // épp teljesített rendelések: azonnal eltűnnek a bent lévők közül (a Shopify keresése percekig késhet)
+function teljSzuro(){var most=Date.now();Object.keys(TELJ).forEach(function(i){if(most-TELJ[i]>240000)delete TELJ[i]});
+  if(D&&D.rendelesek&&Object.keys(TELJ).length)D.rendelesek=D.rendelesek.filter(function(o){return !TELJ[o.id]});}
 function betolt(kezi){
   document.querySelectorAll('.refresh').forEach(function(b){b.disabled=true});
-  google.script.run.withSuccessHandler(function(d){if(d.ue==null&&D&&D.ue)d.ue=D.ue;var kellUe=!d.ue||d.ue===D_UE_REGI;D=d;LAST=Date.now();if(d.beall&&d.beall.tag){IMPORT_TAG=d.beall.tag;var tb=document.getElementById('tagbtn');if(tb){tb.textContent=IMPORT_TAG+' tag';tb.title=IMPORT_TAG+' tag = beimportálva';}}dCacheMent(d);levelBetolt();document.querySelectorAll('.refresh').forEach(function(b){b.disabled=false});rajz();})
+  google.script.run.withSuccessHandler(function(d){if(d.ue==null&&D&&D.ue)d.ue=D.ue;var kellUe=!d.ue||d.ue===D_UE_REGI;D=d;teljSzuro();LAST=Date.now();if(d.beall&&d.beall.tag){IMPORT_TAG=d.beall.tag;var tb=document.getElementById('tagbtn');if(tb){tb.textContent=IMPORT_TAG+' tag';tb.title=IMPORT_TAG+' tag = beimportálva';}}dCacheMent(d);levelBetolt();document.querySelectorAll('.refresh').forEach(function(b){b.disabled=false});rajz();})
    .withFailureHandler(function(e){document.querySelectorAll('.refresh').forEach(function(b){b.disabled=false});document.getElementById('msg').innerHTML='<div class="note err">Hiba: '+esc(e.message)+'</div>';})
    .getData(KULCS,!!kezi);
 }
@@ -962,17 +965,41 @@ function megisTelj(id,no){
   modal('<h3>Csomag nélkül teljesíted?</h3><div>Biztosan teljesíted a <b>'+no+'</b>-et csomag nélkül? A számla automatikusan elkészül.</div>'+
     '<div class="gombok"><button class="btn" onclick="akcio(\'fulfill\')">Mégse</button><button class="btn" onclick="FF.kihagy=0;futtat(\'fulfill\',false,[\''+id+'\'])">Igen, értesítés nélkül</button><button class="btn fo" onclick="FF.kihagy=0;futtat(\'fulfill\',true,[\''+id+'\'])">Igen, értesítéssel</button></div>');
 }
+function futtatKesz(t,r){
+  var link=r.url?'<div style="margin-top:10px"><a target="_blank" href="'+esc(r.letolt)+'">⬇ Letöltés</a> · <a target="_blank" href="'+esc(r.url)+'">Megnyitás a Drive-ban</a></div>':'';
+  var hib=(r.hibak&&r.hibak.length)?'<div class="note err" style="margin-top:8px">'+r.hibak.map(esc).join('<br>')+'</div>':'';
+  var kih=t==='fulfill'&&window.FF&&FF.kihagy?' '+FF.kihagy+' kihagyva (nincs feladva).':'';
+  if(r.ok&&t==='fulfill'){zar();toast('<b>✓ '+esc(r.uzenet)+kih+'</b>','ok',6);kigurul();}   // sikeres teljesítés: nem kell külön ablak
+  else modal('<h3>'+(r.ok?'Kész':'Figyelem')+'</h3><div>'+esc(r.uzenet)+kih+'</div>'+link+hib+'<div class="gombok"><button class="btn fo" onclick="zar()">Rendben</button></div>');
+  if(t==='fulfill'&&r.idk&&r.idk.length&&D){r.idk.forEach(function(i){TELJ[i]=Date.now();delete KIJ[i]});teljSzuro();rajz();}   // azonnal eltűnnek a listából
+  if(r.ok||(t==='fulfill'&&r.idk&&r.idk.length)){if(r.ok)KIJ={};betolt(false);}
+}
+// Teljesítés kis részletekben (10 rendelés/kérés): egy hosszú kérést a hálózat megszakíthat; így nincs elveszett eredmény, és hiba esetén látszik, meddig jutott
+function fulfillReszek(L,ertesit){
+  var ids=L.map(function(o){return o.id}),ossz={ok:true,jo:0,idk:[],hibak:[],uzenet:''},sz=0,db=ids.length,N=10,megy=0;
+  function kovetkezo(){
+    if(sz>=db){ossz.uzenet=ossz.jo+' rendelés teljesítve'+(ossz.hibak.length?', '+ossz.hibak.length+' hibás':'')+'.';futtatKesz('fulfill',ossz);return;}
+    var resz=ids.slice(sz,sz+N);
+    modal('<h3>Folyamatban…</h3><div class="sub">'+Math.min(sz,db)+' / '+db+' rendelés kész</div>');
+    var kuld=function(probalt){
+      google.script.run.withSuccessHandler(function(r){
+        ossz.jo+=r.jo||0;ossz.idk=ossz.idk.concat(r.idk||[]);if(r.hibak&&r.hibak.length)ossz.hibak=ossz.hibak.concat(r.hibak);if(!r.ok&&!(r.hibak&&r.hibak.length))ossz.hibak.push(r.uzenet||'ismeretlen hiba');
+        sz+=resz.length;kovetkezo();
+      }).withFailureHandler(function(e){
+        if(!probalt){setTimeout(function(){kuld(1)},4000);return;}   // egyszer újrapróbáljuk (a már teljesítettet a szerver kihagyja, nem küld újabb levelet)
+        ossz.ok=false;ossz.hibak.push('A(z) '+(sz+1)+'. rendeléstől nem sikerült a kapcsolat ('+e.message+'). Töltsd újra az oldalt, és jelöld ki újra a maradékot – amit már teljesítettünk, azt a rendszer kihagyja.');
+        ossz.uzenet=ossz.jo+' rendelés teljesítve, '+(db-sz)+' maradt.';futtatKesz('fulfill',ossz);
+      }).muvelet(KULCS,'fulfill',resz,!!ertesit);
+    };
+    kuld(0);
+  }
+  kovetkezo();
+}
 function futtat(t,ertesit,idk){
   var L=kijeloltek();if(idk)L=L.filter(function(o){return idk.indexOf(o.id)>=0});
+  if(t==='fulfill'&&L.length>10){fulfillReszek(L,ertesit);return;}
   modal('<h3>Folyamatban…</h3><div class="sub">'+L.length+' rendelés</div>');
-  google.script.run.withSuccessHandler(function(r){
-    var link=r.url?'<div style="margin-top:10px"><a target="_blank" href="'+esc(r.letolt)+'">⬇ Letöltés</a> · <a target="_blank" href="'+esc(r.url)+'">Megnyitás a Drive-ban</a></div>':'';
-    var hib=(r.hibak&&r.hibak.length)?'<div class="note err" style="margin-top:8px">'+r.hibak.map(esc).join('<br>')+'</div>':'';
-    var kih=t==='fulfill'&&window.FF&&FF.kihagy?' '+FF.kihagy+' kihagyva (nincs feladva).':'';
-    if(r.ok&&t==='fulfill'){zar();toast('<b>✓ '+esc(r.uzenet)+kih+'</b>','ok',6);kigurul();}   // sikeres teljesítés: nem kell külön ablak
-    else modal('<h3>'+(r.ok?'Kész':'Figyelem')+'</h3><div>'+esc(r.uzenet)+kih+'</div>'+link+hib+'<div class="gombok"><button class="btn fo" onclick="zar()">Rendben</button></div>');
-    if(r.ok&&(t==='fulfill'||t==='paid'||t==='karmen')){KIJ={};betolt(false);}
-  }).withFailureHandler(function(e){
+  google.script.run.withSuccessHandler(function(r){futtatKesz(t,r);}).withFailureHandler(function(e){
     modal('<h3>Hiba</h3><div>'+esc(e.message)+'</div><div class="gombok"><button class="btn" onclick="zar()">Bezár</button></div>');
   }).muvelet(KULCS,t,L.map(function(o){return o.id}),!!ertesit);
 }
