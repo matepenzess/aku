@@ -609,7 +609,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
-var AKU_VERZIO='2026-11-15 · 32';
+var AKU_VERZIO='2026-11-15 · 33';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -755,6 +755,8 @@ var SZ_F={mind:function(){return true},gyanus:function(o){return o.gyanus},uj:fu
   exp:exportalt,pan:pannonban,utem:utemKesobb,fagy:function(o){return !!o.fagy},sajat:function(o){return !!o.sajat},beszall:function(o){return !!o.beszall},visszatero:function(o){return o.ujra&&o.ujra.db>1},
   email:function(o){return o.levelek.length},nagy:function(o){return o.panel+o.kicsi>=20},utanvet:function(o){return o.fizetes==='Utánvét'&&!o.sajat},regi:function(o){return o.nap>=3}};
 var SZ_NEV={sajat:'Saját futár',beszall:'Beszállításra vár',fagy:'Fagyasztva',utem:'Ütemezett',mind:'Összes',gyanus:'Figyelmet igényel',uj:'Még nincs exportálva',exp:'Exportálva – megerősítésre vár',pan:'Pannonban',visszatero:'Visszatérő vevő',email:'Email jött',nagy:'Nagy rendelés (20+)',utanvet:'Utánvétes',regi:'3+ napja bent'};
+var SZUROK_NYIT=false;try{SZUROK_NYIT=localStorage.getItem('szurok')==='1'}catch(e){}
+function szurokKapcs(){SZUROK_NYIT=!SZUROK_NYIT;try{localStorage.setItem('szurok',SZUROK_NYIT?'1':'0')}catch(e){}rajzBent();}
 function szur(s){SZURO=SZURO===s?'mind':s;rajzBent();}
 function rendez(){REND=REND==='uj'?'regi':'uj';try{localStorage.setItem('rend',REND)}catch(e){}rajzBent();}
 var SULY={piros:5,sarga:4,lila:3,kek:2,zold:1,szurke:0};
@@ -779,10 +781,13 @@ function rajzBent(){
   var R=D.rendelesek,RN=R.filter(function(o){return !o.sajat&&!o.beszall}),n=function(k){return (k==='sajat'||k==='beszall'?R:RN).filter(SZ_F[k]).length},panel=0,kicsi=0;
   RN.forEach(function(o){panel+=o.panel;kicsi+=o.kicsi});   // a saját futáros rendelés nem számít a Pannon-súlyba
   var S=function(k,cls){return stat(n(k),SZ_NEV[k].toLowerCase(),cls,SZURO===k,"szur('"+k+"')")};
-  document.getElementById('stats-bent').innerHTML=stat(RN.length,'összes','',SZURO==='mind',"szur('mind')")+
-    '<span class="st plain"><b>'+panel+'</b>panel'+(kicsi?' + '+kicsi+' kicsi':'')+'</span><span class="st sep"></span>'+
-    S('gyanus','r')+S('uj','')+S('exp','a')+S('pan','g')+'<span class="st sep"></span>'+
+  var SZ_ALL=S('gyanus','r')+S('uj','')+S('exp','a')+S('pan','g')+'<span class="st sep"></span>'+
     S('nagy','p')+S('visszatero','')+S('utanvet','')+S('email','b')+S('regi','a')+S('utem','p')+S('fagy','b')+S('sajat','b')+S('beszall','p');
+  var SZ_AKT=(SZURO!=='mind'&&SZ_NEV[SZURO])?S(SZURO,''):'';
+  document.getElementById('stats-bent').innerHTML=stat(RN.length,'összes','',SZURO==='mind',"szur('mind')")+
+    '<span class="st plain"><b>'+panel+'</b>panel'+(kicsi?' + '+kicsi+' kicsi':'')+'</span>'+
+    '<button class="st" onclick="szurokKapcs()" title="Szűrők megjelenítése / elrejtése">'+(SZUROK_NYIT?'▾':'▸')+' Szűrők</button>'+
+    (SZUROK_NYIT?'<span class="st sep"></span>'+SZ_ALL:SZ_AKT);
   var q=qErt('q'),U=[],FZ=[],SJ=[],BS=[];
   // keresésnél minden rendelésben keres (szűrőtől függetlenül); különben az ütemezettek külön részbe kerülnek
   var L=R.filter(function(o){
@@ -830,7 +835,7 @@ function kartya(o){
     '<div class="a4">'+tetelHtml(o,true)+(o.ragaszto?'<div class="sub rag">+ '+o.ragaszto+' db ragasztó</div>':'')+'</div>'+
     '<div class="af">'+fizJel(o)+'</div>'+
     '<div class="a5 amt">'+ft(o.osszeg)+'<div class="sub">'+esc(panelSzov(o)||'–')+'</div></div>'+
-    '<div class="a6 why">'+lepcso(o)+(f?'<span class="tg t-'+f.s+'">'+esc(f.t)+'</span>':'<span class="sub nincsjel">Jelzés: nincs</span>')+(J.length>1?'<span class="more" title="'+esc(J.slice(1).map(function(j){return j.t}).join(', '))+'">+'+(J.length-1)+'</span>':'')+'</div>'+
+    '<div class="a6 why">'+lepcso(o)+(f?'<span class="tg t-'+f.s+'">'+esc(f.t)+'</span>':'')+(J.length>1?'<span class="more" title="'+esc(J.slice(1).map(function(j){return j.t}).join(', '))+'">+'+(J.length-1)+'</span>':'')+'</div>'+
     '</div>';
 }
 // 2.17: fizetés jelzése a kártyán (címke-ellenőrzéshez)
