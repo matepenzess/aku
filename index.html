@@ -81,17 +81,16 @@ button.csk{background:var(--card);cursor:pointer;font:inherit;color:inherit}
 .spnev{min-width:0}.spmail{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .spsor.sp-b{background:var(--card);border-style:dashed}.sp-b .dot{background:none;border:2px solid var(--mu)}.sp-b .spst b{color:var(--mu2)}
 @media (max-width:760px){.spnb{grid-auto-flow:row;grid-template-rows:none;grid-auto-columns:auto}}
-.bub-bg{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.32);-webkit-backdrop-filter:blur(16px) saturate(1.15);backdrop-filter:blur(16px) saturate(1.15);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:max(18px,env(safe-area-inset-top)) 18px max(18px,env(safe-area-inset-bottom));animation:bubBe .2s ease-out}
-.bub{width:min(100%,430px);max-height:60vh;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--card);border:1px solid var(--ln2);border-radius:22px;box-shadow:0 24px 70px rgba(0,0,0,.45);padding:16px;animation:bubNo .28s cubic-bezier(.2,.9,.25,1.08);outline:0}
+.bub-bg{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.32);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:max(18px,env(safe-area-inset-top)) 18px max(18px,env(safe-area-inset-bottom))}
+.bub{width:min(100%,430px);max-height:60vh;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--card);border:1px solid var(--ln2);border-radius:22px;box-shadow:0 24px 70px rgba(0,0,0,.45);padding:16px;animation:bubNo .13s ease-out;outline:0}
 .bub .bh{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.bub .bn{font-size:20px;font-weight:700;color:var(--hi)}.bub .bw{font-size:15.5px;margin-top:1px}.bub .bo{text-align:right;font-size:17px;font-weight:650;color:var(--hi);white-space:nowrap}
 .bub .bs{margin-top:12px;padding-top:10px;border-top:1px solid var(--ln)}.bub .bj{margin-top:10px}.bub .mj{margin-top:8px}
-.bub-act{width:min(100%,320px);background:var(--card);border:1px solid var(--ln2);border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.35);animation:bubNo .3s .04s cubic-bezier(.2,.9,.25,1.08) both}
+.bub-act{width:min(100%,320px);background:var(--card);border:1px solid var(--ln2);border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.35);animation:bubNo .13s ease-out}
 .bub-act button{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;min-height:48px;padding:12px 16px;border:0;border-top:1px solid var(--ln);background:none;font-size:17px;color:var(--tx);text-align:left}.bub-act button:first-child{border-top:0}.bub-act button:active{background:var(--hov)}.bub-act .bi{color:var(--mu2);font-size:18px}
-@keyframes bubBe{from{opacity:0}to{opacity:1}}@keyframes bubNo{0%{transform:perspective(900px) translateZ(-90px) rotateX(10deg) scale(.86);opacity:.15}70%{transform:perspective(900px) translateZ(10px) rotateX(-1deg) scale(1.015);opacity:1}100%{transform:none;opacity:1}}
-.nyom{transform:perspective(700px) translateZ(-16px) scale(.962);box-shadow:0 14px 34px rgba(0,0,0,.4);transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s;position:relative;z-index:2}
-body.no3d .nyom{transform:none;box-shadow:none}
-.c,.spsor,.spnb .ch,.kcard{transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
-@media (prefers-reduced-motion:reduce){.bub-bg,.bub,.bub-act{animation:none}.nyom{transform:none;transition:none}}
+@keyframes bubNo{from{transform:scale(.95);opacity:0}to{transform:none;opacity:1}}
+.nyom{transform:scale(.985);transition:transform .09s ease-out}
+body.no3d .nyom{transform:none}
+@media (prefers-reduced-motion:reduce){.bub,.bub-act{animation:none}.nyom{transform:none;transition:none}}
 @media (prefers-reduced-transparency:reduce){.bub-bg{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(0,0,0,.62)}}
 .spmenu{position:fixed;z-index:60;min-width:210px;background:var(--card);border:1px solid var(--ln2);border-radius:12px;padding:5px;box-shadow:var(--sh)}
 .spmenu button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;background:none;border-radius:8px;font-size:13.5px;color:var(--tx)}.spmenu button:hover{background:var(--hov)}
@@ -626,13 +625,13 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
-var AKU_VERZIO='2026-11-15 · 33';
+var AKU_VERZIO='2026-11-15 · 34';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
   modal('<h3>Több</h3><div class="tobb-l">'+li('vr','Visszáruk','c-vr')+li('ue','Utánvétek','c-ue')+li('mate5','MATE kupon','c-mate5')+li('naplo','Export napló','')+'</div>'+
     '<div class="kl2">Értesítések</div><div id="push-doboz" class="push-doboz"></div>'+
-    '<div class="kl2">Hosszú nyomás</div><div class="seg"><button class="'+(haptBe()?'on':'')+'" onclick="haptAllit(true)">3D hatás és rezgés</button><button class="'+(haptBe()?'':'on')+'" onclick="haptAllit(false)">Ki</button></div>'+
+    '<div class="kl2">Hosszú nyomás</div><div class="seg"><button class="'+(haptBe()?'on':'')+'" onclick="haptAllit(true)">Hatás és rezgés</button><button class="'+(haptBe()?'':'on')+'" onclick="haptAllit(false)">Ki</button></div>'+
     '<div style="margin-top:8px"><button class="btn" onclick="hapt(30)">Próba rezgés</button> <span class="sub">iPhone-on nem biztos, hogy megszólal</span></div>'+
     '<div class="kl2">Megjelenés</div><div class="seg">'+th('system','Rendszer')+th('light','Világos')+th('dark','Sötét')+'</div>'+
     (window.AKU_WEB?'<div class="tobb-l" style="margin-top:14px"><button class="tobb-i" onclick="zar();AKU_KAPCSOLAT()">Kapcsolat…</button><button class="tobb-i" style="color:var(--r)" onclick="AKU_KILEP()">Kijelentkezés</button></div>':'')+
@@ -1766,8 +1765,8 @@ function bubCsomag(sz){   // csomag (Csomagok, Speciális, „Nem ért be”)
   var nyomT=null,nyomEl=null;
   var nyomVeg=function(){clearTimeout(nyomT);nyomT=null;if(nyomEl){nyomEl.classList.remove('nyom');nyomEl=null}};
   document.addEventListener('touchstart',function(e){var s=sorEl(e.target);if(!s||e.touches.length!==1)return;px=e.touches[0].clientX;py=e.touches[0].clientY;
-    nyomVeg();nyomT=setTimeout(function(){if(haptBe()){s.classList.add('nyom');nyomEl=s}},140);   // 3D: lassan benyomódik, amíg tartod
-    clearTimeout(tm);tm=setTimeout(function(){tm=null;SP_LONG=Date.now();nyomVeg();nyit_(s,px,py,true);},550);},{passive:true});
+    nyomVeg();nyomT=setTimeout(function(){if(haptBe()){s.classList.add('nyom');nyomEl=s}},90);   // 3D: lassan benyomódik, amíg tartod
+    clearTimeout(tm);tm=setTimeout(function(){tm=null;SP_LONG=Date.now();nyomVeg();nyit_(s,px,py,true);},380);},{passive:true});
   var megse=function(){nyomVeg();if(tm){clearTimeout(tm);tm=null}};
   document.addEventListener('touchmove',function(e){if(tm&&e.touches[0]&&(Math.abs(e.touches[0].clientX-px)>10||Math.abs(e.touches[0].clientY-py)>10))megse();},{passive:true});
   document.addEventListener('touchend',megse,{passive:true});document.addEventListener('touchcancel',megse,{passive:true});
@@ -2226,7 +2225,7 @@ var TB_HUZ=0;
       TB_DRAG=k.dataset.id;S={id:k.dataset.id,klon:kl,dx:sx-r.left,dy:sy-r.top,x:sx,y:sy,ir:0,dw:null,col:k.closest('.kcol')};
       document.addEventListener('touchmove',mozog,{passive:false});document.addEventListener('touchend',vege);document.addEventListener('touchcancel',vege);
       hapt(12);
-    },450);},{passive:true});
+    },350);},{passive:true});
   var megse=function(){if(tm){clearTimeout(tm);tm=null;if(!S&&TB_DRAG==='?')TB_DRAG=null}};
   document.addEventListener('touchmove',function(e){if(tm&&e.touches[0]&&(Math.abs(e.touches[0].clientX-sx)>10||Math.abs(e.touches[0].clientY-sy)>10))megse();},{passive:true});
   document.addEventListener('touchend',megse,{passive:true});document.addEventListener('touchcancel',megse,{passive:true});
