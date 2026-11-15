@@ -87,13 +87,27 @@ button.csk{background:var(--card);cursor:pointer;font:inherit;color:inherit}
 .bub .bs{margin-top:12px;padding-top:10px;border-top:1px solid var(--ln)}.bub .bj{margin-top:10px}.bub .mj{margin-top:8px}
 .bub-act{width:min(100%,320px);background:var(--card);border:1px solid var(--ln2);border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.35);animation:bubNo .3s .04s cubic-bezier(.2,.9,.25,1.08) both}
 .bub-act button{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;min-height:48px;padding:12px 16px;border:0;border-top:1px solid var(--ln);background:none;font-size:17px;color:var(--tx);text-align:left}.bub-act button:first-child{border-top:0}.bub-act button:active{background:var(--hov)}.bub-act .bi{color:var(--mu2);font-size:18px}
-@keyframes bubBe{from{opacity:0}to{opacity:1}}@keyframes bubNo{from{transform:scale(.88);opacity:.2}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion:reduce){.bub-bg,.bub,.bub-act{animation:none}}
+@keyframes bubBe{from{opacity:0}to{opacity:1}}@keyframes bubNo{0%{transform:perspective(900px) translateZ(-90px) rotateX(10deg) scale(.86);opacity:.15}70%{transform:perspective(900px) translateZ(10px) rotateX(-1deg) scale(1.015);opacity:1}100%{transform:none;opacity:1}}
+.nyom{transform:perspective(700px) translateZ(-16px) scale(.962);box-shadow:0 14px 34px rgba(0,0,0,.4);transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s;position:relative;z-index:2}
+body.no3d .nyom{transform:none;box-shadow:none}
+.c,.spsor,.spnb .ch,.kcard{transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+@media (prefers-reduced-motion:reduce){.bub-bg,.bub,.bub-act{animation:none}.nyom{transform:none;transition:none}}
 @media (prefers-reduced-transparency:reduce){.bub-bg{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(0,0,0,.62)}}
 .spmenu{position:fixed;z-index:60;min-width:210px;background:var(--card);border:1px solid var(--ln2);border-radius:12px;padding:5px;box-shadow:var(--sh)}
 .spmenu button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;background:none;border-radius:8px;font-size:13.5px;color:var(--tx)}.spmenu button:hover{background:var(--hov)}
 @media (pointer:coarse){.spsor,.cst tr.sor,.c[data-no],.spnb .ch{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}}
-@media (max-width:760px){.spsor{grid-template-columns:12px 1fr auto 36px;grid-template-areas:"d no ar b" "d nev nev b" "d st st st"}.spsor>.dot{grid-area:d}.spsor>.sp1{grid-area:no}.spsor>.spnev{grid-area:nev}.spsor>.spar{grid-area:ar}.spsor>.spst{grid-area:st}.spsor>.spbell,.spsor>.spbell0{grid-area:b}}
+@media (max-width:760px){
+ /* Speciális fül telefonon: egy soros kártyák (a nullás elrejtve), vékony sorok, nincs kijelölés / címke-nyomtatás */
+ #sp-kartya{flex-wrap:nowrap;overflow-x:auto;gap:6px;margin:4px 0 8px;padding:0 16px 2px;-webkit-overflow-scrolling:touch}
+ #sp-kartya .csk{flex:0 0 auto;min-width:0;padding:6px 12px;display:flex;align-items:baseline;gap:6px}#sp-kartya .csk b{display:inline;font-size:17px}#sp-kartya .csk span{font-size:12.5px;white-space:nowrap}
+ #sp-kartya .csk.nul:not(.on){display:none}
+ .spsav h4 .spall,.spsav h4 .spbtns,.spnb .ch>input{display:none!important}.spnb .ch{grid-template-columns:1fr;padding:4px 2px}
+ .spsor{grid-template-columns:10px auto 1fr auto auto;grid-template-areas:"d no nev ar b" "d st st st b";padding:7px 12px;gap:1px 10px;align-items:start;line-height:1.3}
+ .spsor>.dot{grid-area:d;margin-top:5px}.spsor>.sp1{grid-area:no}.spsor>.spnev{grid-area:nev}.spsor>.spar{grid-area:ar}.spsor>.spst{grid-area:st}.spsor>.spbell{grid-area:b;align-self:center}
+ .spsor>.spbell0,.spsor .spar small{display:none}
+ .spsor>.spst{display:flex;gap:0 8px;flex-wrap:wrap;align-items:baseline}.spsor .spst b,.spsor .spst small{display:inline}
+ .spsor .spno{font-size:14px}.spdet{padding:0 4px 4px}
+}
 .cskartyak{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px}
 .csk{background:var(--card);border:1px solid var(--ln);border-radius:11px;padding:9px 13px;min-width:112px;text-align:left}
 .csk b{display:block;font-size:20px;color:var(--hi);font-variant-numeric:tabular-nums}.csk span{font-size:12px;color:var(--mu2)}
@@ -411,12 +425,15 @@ body.tb-huz{overflow:hidden;-webkit-user-select:none;user-select:none}
  .st{flex:0 0 auto;height:32px}.st.sep{display:none}
  #list-bent{margin-left:0;margin-right:0}
  .lfej{padding:4px 16px}.lfej .cb,.go{display:none}
- .c,.c.m5{grid-template-columns:auto 1fr auto;grid-template-areas:"no who amt" "no it it" "fz fz fz" "st st st";gap:3px 12px;padding:12px 16px;min-height:0;align-items:start}
+ .c,.c.m5{grid-template-columns:auto 1fr auto auto;grid-template-areas:"no who af amt" "no it it it" "st st st st";gap:1px 10px;padding:7px 14px;min-height:0;align-items:start;line-height:1.3}
  .c>.a1{display:none}.c>.a2{grid-area:no;display:block;margin-top:0;min-width:62px}.c>.a2 .no{font-weight:700}.c>.a3{grid-area:who}.c>.a4{grid-area:it}
- .c>.a5{grid-area:amt;text-align:right}.c>.af{grid-area:fz;text-align:left}.c>.af:empty{display:none}.c>.a6{grid-area:st}
+ .c>.a5{grid-area:amt;text-align:right}.c>.af{grid-area:af;text-align:right;align-self:center}.c>.af:empty{display:none}.c>.a6{grid-area:st}
+ .c>.a4{display:flex;flex-wrap:wrap;gap:1px 10px;font-size:12.5px}.c>.a4 .sub{margin:0}.c>.a4 .sw{margin:0}
+ .c>.a2 .sub{font-size:11px}.c>.a5 .sub{font-size:11px}.c>.a6.why{margin-top:1px}
+ #tb-csv,.abar button[onclick="akcio('pannon')"]{display:none!important}
  .c .steps,.c .nincsjel,.c .fizsz{display:none}.c>.a6.why:not(:has(.tg)){display:none}
  .c.expv{background:var(--gexp);border-color:var(--gexpl);box-shadow:inset 5px 0 0 var(--g)}
- .c.th{display:none}.c>.a3 .sub{display:block}.c>.a3 .sub:before{content:none}
+ .c.th{display:none}.c>.a3 .sub{display:inline;margin-left:6px}.c>.a3 .sub:before{content:none}
  .c .a6.why{flex-direction:row;align-items:center;flex-wrap:wrap}
  .abar{left:8px;right:8px;transform:none;bottom:calc(70px + env(safe-area-inset-bottom))}
  body.has-insp .abar{display:none}
@@ -615,6 +632,8 @@ function tobb(){
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
   modal('<h3>Több</h3><div class="tobb-l">'+li('vr','Visszáruk','c-vr')+li('ue','Utánvétek','c-ue')+li('mate5','MATE kupon','c-mate5')+li('naplo','Export napló','')+'</div>'+
     '<div class="kl2">Értesítések</div><div id="push-doboz" class="push-doboz"></div>'+
+    '<div class="kl2">Hosszú nyomás</div><div class="seg"><button class="'+(haptBe()?'on':'')+'" onclick="haptAllit(true)">3D hatás és rezgés</button><button class="'+(haptBe()?'':'on')+'" onclick="haptAllit(false)">Ki</button></div>'+
+    '<div style="margin-top:8px"><button class="btn" onclick="hapt(30)">Próba rezgés</button> <span class="sub">iPhone-on nem biztos, hogy megszólal</span></div>'+
     '<div class="kl2">Megjelenés</div><div class="seg">'+th('system','Rendszer')+th('light','Világos')+th('dark','Sötét')+'</div>'+
     (window.AKU_WEB?'<div class="tobb-l" style="margin-top:14px"><button class="tobb-i" onclick="zar();AKU_KAPCSOLAT()">Kapcsolat…</button><button class="tobb-i" style="color:var(--r)" onclick="AKU_KILEP()">Kijelentkezés</button></div>':'')+
     '<div class="sub" style="margin:14px 4px 0">AKU 2.0 · verzió '+AKU_VERZIO+(D&&D.ido?' · betöltés '+(D.ido.ossz/1000).toFixed(1)+' s ('+Object.keys(D.ido.reszek).map(function(k){return k+' '+(D.ido.reszek[k]/1000).toFixed(1)}).join(', ')+')':'')+'</div><div class="gombok"><button class="btn fo" onclick="zar()">Kész</button></div>');
@@ -1457,6 +1476,8 @@ function sz3(s){SZ3=s;rajzVr();}
 // Hosszú nyomás / jobb klikk: csengő, figyelés be-ki. Szerver: specialisBeallit, getSpecialisErtek.
 // A beállítások kulcsa a csomagszám (20+ jegyű) vagy a rendelésszám (#10412): a rendelésszámra tett jelölés a feladás után a csomagra is érvényes.
 var SP_ERT={},SP_ERT_KER={},SP_ERT_HIBA=0,SPNY={},SP_MAX=5,SP_TOBB={},SP_SEL={},SP_NB_SOR=4,SP_NB_OSZL=2;
+function spTel(){return !!(window.matchMedia&&matchMedia('(max-width:760px)').matches);}   // telefonos szélesség: alapból csak 2 sor, a többi lenyitható
+function spMax(){return spTel()?2:SP_MAX;}
 // „+ N további” lenyitó: db = a rejtett elemek száma, tart = a rejtett elemek HTML-je (csak lenyitva készül el)
 function spTobb(k,db,tart){if(db<=0)return '';return (SP_TOBB[k]?tart():'')+'<button class="sptobb" onclick="event.stopPropagation();spTobbKapcs(\''+k+'\')">'+(SP_TOBB[k]?'▴ Kevesebb':'▾ + '+db+' további')+'</button>';}
 function spTobbKapcs(k){SP_TOBB[k]=!SP_TOBB[k];rajzSpec();}
@@ -1564,7 +1585,7 @@ function rajzSpec(){
   // „Nem ért be”: minden csomagra, 4 soros oszlopokban, kijelölhető; a kijelölteknek címke-újranyomtatás vagy email a Pannonnak
   var NB=spNemBeerk(L);
   Object.keys(SP_SEL).forEach(function(k){if(!NB.some(function(r){return r.sz===k}))delete SP_SEL[k]});
-  var nSel=Object.keys(SP_SEL).length,nbMax=SP_NB_SOR*SP_NB_OSZL,mind=NB.length&&nSel===NB.length;
+  var nSel=Object.keys(SP_SEL).length,nbMax=spTel()?2:SP_NB_SOR*SP_NB_OSZL,mind=NB.length&&nSel===NB.length;
   var chip=function(r){
     var sz=r.sz,o=spAll(r,ma),k=spKert(r),x=LV[sz],inf=[];
     if(r.varos)inf.push(esc(r.varos));
@@ -1621,9 +1642,9 @@ function rajzSpec(){
     if(c==='g'){var nyitva=SP_ZOLD||SP_SZUR==='g';
       h+='<div class="spcim spcim-k" onclick="spZold()">'+(nyitva?'▾ ':'▸ ')+cim[c]+' · '+A.length+'</div>';if(!nyitva)return;}
     else h+='<div class="spcim">'+cim[c]+' · '+A.length+'</div>';
-    h+=A.slice(0,SP_MAX).map(sorHtml).join('')+spTobb('l'+c,A.length-SP_MAX,function(){return A.slice(SP_MAX).map(sorHtml).join('')});
+    h+=A.slice(0,spMax()).map(sorHtml).join('')+spTobb('l'+c,A.length-spMax(),function(){return A.slice(spMax()).map(sorHtml).join('')});
   });
-  if(RBF.length)h+='<div class="spcim">'+cim.b+' · '+RBF.length+'</div>'+RBF.slice(0,SP_MAX).map(rendHtml).join('')+spTobb('lb',RBF.length-SP_MAX,function(){return RBF.slice(SP_MAX).map(rendHtml).join('')});
+  if(RBF.length)h+='<div class="spcim">'+cim.b+' · '+RBF.length+'</div>'+RBF.slice(0,spMax()).map(rendHtml).join('')+spTobb('lb',RBF.length-spMax(),function(){return RBF.slice(spMax()).map(rendHtml).join('')});
   document.getElementById('sp-lista').innerHTML=h||'<div class="empty">'+(SP_SZUR?'Nincs ilyen csomag.':'Nincs speciális csomag.')+'</div>';
   spErtekKer(L,ma);
 }
@@ -1686,6 +1707,20 @@ function spMenuRend(no,x,y){   // bent lévő rendelés
   t.push(['Rendelés megnyitása',"ful('bent');nyit('"+no+"')"]);
   spMenuKi(t,x,y);
 }
+// ===== HAPTIKA ÉS 3D HATÁS a hosszú nyomásnál (Több › beállítás; alapból be) =====
+// Android: valódi rezgés (Vibration API). iPhone: a Safari/PWA nem ad rezgés-API-t; az iOS 17.4+ „switch” kapcsolójának kattintásával próbálkozunk
+// (ez gesztusfüggő, nem biztos, hogy minden helyzetben megszólal). A 3D hatás: a lenyomott elem „befelé nyomódik”, a buborék mélyből ugrik elő.
+function haptBe(){try{return localStorage.getItem('hapt')!=='0'}catch(e){return true}}
+function haptAllit(be){try{localStorage.setItem('hapt',be?'1':'0')}catch(e){}document.body.classList.toggle('no3d',!be);if(document.querySelector('.tobb-l'))tobb();}
+function hapt(ms){
+  if(!haptBe())return;
+  try{if(navigator.vibrate)navigator.vibrate(ms||10)}catch(e){}
+  try{var l=document.getElementById('hapt-l');
+    if(!l){l=document.createElement('label');l.id='hapt-l';l.setAttribute('aria-hidden','true');l.style.cssText='position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none';
+      var i=document.createElement('input');i.type='checkbox';i.setAttribute('switch','');l.appendChild(i);document.body.appendChild(l);}
+    l.click();}catch(e){}
+}
+if(!haptBe())document.body.classList.add('no3d');
 // ===== ELŐNÉZETI BUBORÉK (hosszú nyomás, mint az iOS helyi menüje előnézettel) =====
 // Közepes-nagy, lekerekített buborék az elmosott háttér előtt; a tartalma görgethető, alatta rövid műveletlista (HIG: context-menus.md › Mobile: előnézet, kevés elem).
 function bubZar(){var b=document.getElementById('bub');if(b)b.remove();document.body.style.overflow='';}
@@ -1695,7 +1730,7 @@ function bubNyit(tart,akciok){
   b.onclick=function(e){if(e.target===b)bubZar()};
   b.innerHTML='<div class="bub" tabindex="-1">'+tart+'</div><div class="bub-act">'+akciok.map(function(a){return '<button onclick="bubZar();'+a[1]+'"><span>'+a[0]+'</span><span class="bi">'+(a[2]||'')+'</span></button>'}).join('')+'</div>';
   document.body.appendChild(b);document.body.style.overflow='hidden';
-  try{if(navigator.vibrate)navigator.vibrate(10)}catch(e){}
+  hapt(14);
 }
 document.addEventListener('keydown',function(e){if(e.key==='Escape')bubZar()});
 function bubRend(no){   // bent lévő rendelés
@@ -1728,9 +1763,12 @@ function bubCsomag(sz){   // csomag (Csomagok, Speciális, „Nem ért be”)
     if(sz)spMenu(sz,x,y);else if(no)spMenuRend(no,x,y);};   // egérrel (jobb klikk): kis menü
   document.addEventListener('contextmenu',function(e){var s=sorEl(e.target);if(!s)return;e.preventDefault();if(Date.now()-SP_LONG<1000)return;nyit_(s,e.clientX,e.clientY,false);});
   var tm=null,px=0,py=0;
+  var nyomT=null,nyomEl=null;
+  var nyomVeg=function(){clearTimeout(nyomT);nyomT=null;if(nyomEl){nyomEl.classList.remove('nyom');nyomEl=null}};
   document.addEventListener('touchstart',function(e){var s=sorEl(e.target);if(!s||e.touches.length!==1)return;px=e.touches[0].clientX;py=e.touches[0].clientY;
-    clearTimeout(tm);tm=setTimeout(function(){tm=null;SP_LONG=Date.now();nyit_(s,px,py,true);},550);},{passive:true});
-  var megse=function(){if(tm){clearTimeout(tm);tm=null}};
+    nyomVeg();nyomT=setTimeout(function(){if(haptBe()){s.classList.add('nyom');nyomEl=s}},140);   // 3D: lassan benyomódik, amíg tartod
+    clearTimeout(tm);tm=setTimeout(function(){tm=null;SP_LONG=Date.now();nyomVeg();nyit_(s,px,py,true);},550);},{passive:true});
+  var megse=function(){nyomVeg();if(tm){clearTimeout(tm);tm=null}};
   document.addEventListener('touchmove',function(e){if(tm&&e.touches[0]&&(Math.abs(e.touches[0].clientX-px)>10||Math.abs(e.touches[0].clientY-py)>10))megse();},{passive:true});
   document.addEventListener('touchend',megse,{passive:true});document.addEventListener('touchcancel',megse,{passive:true});
   // a hosszú nyomás utáni „kattintás” ne nyissa meg a sort; a menün kívüli kattintás zárja a menüt
@@ -2169,7 +2207,7 @@ var TB_HUZ=0;
     if(col)col.classList.add('over');S.col=col;
     var W=window.innerWidth,zona=Math.max(48,W*0.14),ir=S.x>W-zona?1:S.x<zona?-1:0;
     if(ir!==S.ir){S.ir=ir;clearTimeout(S.dw);
-      if(ir)S.dw=setTimeout(function ugor(){oszlopSzel(ir);try{if(navigator.vibrate)navigator.vibrate(8)}catch(x){}if(S&&S.ir===ir)S.dw=setTimeout(ugor,700);},320);}
+      if(ir)S.dw=setTimeout(function ugor(){oszlopSzel(ir);hapt(8);if(S&&S.ir===ir)S.dw=setTimeout(ugor,700);},320);}
   }
   function vege(){
     document.removeEventListener('touchmove',mozog,{passive:false});document.removeEventListener('touchend',vege);document.removeEventListener('touchcancel',vege);
@@ -2187,7 +2225,7 @@ var TB_HUZ=0;
       document.body.appendChild(kl);k.classList.add('mozog');document.body.classList.add('tb-huz');
       TB_DRAG=k.dataset.id;S={id:k.dataset.id,klon:kl,dx:sx-r.left,dy:sy-r.top,x:sx,y:sy,ir:0,dw:null,col:k.closest('.kcol')};
       document.addEventListener('touchmove',mozog,{passive:false});document.addEventListener('touchend',vege);document.addEventListener('touchcancel',vege);
-      try{if(navigator.vibrate)navigator.vibrate(12)}catch(x){}
+      hapt(12);
     },450);},{passive:true});
   var megse=function(){if(tm){clearTimeout(tm);tm=null;if(!S&&TB_DRAG==='?')TB_DRAG=null}};
   document.addEventListener('touchmove',function(e){if(tm&&e.touches[0]&&(Math.abs(e.touches[0].clientX-sx)>10||Math.abs(e.touches[0].clientY-sy)>10))megse();},{passive:true});
