@@ -81,9 +81,18 @@ button.csk{background:var(--card);cursor:pointer;font:inherit;color:inherit}
 .spnev{min-width:0}.spmail{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .spsor.sp-b{background:var(--card);border-style:dashed}.sp-b .dot{background:none;border:2px solid var(--mu)}.sp-b .spst b{color:var(--mu2)}
 @media (max-width:760px){.spnb{grid-auto-flow:row;grid-template-rows:none;grid-auto-columns:auto}}
+.bub-bg{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.32);-webkit-backdrop-filter:blur(16px) saturate(1.15);backdrop-filter:blur(16px) saturate(1.15);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:max(18px,env(safe-area-inset-top)) 18px max(18px,env(safe-area-inset-bottom));animation:bubBe .2s ease-out}
+.bub{width:min(100%,430px);max-height:60vh;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--card);border:1px solid var(--ln2);border-radius:22px;box-shadow:0 24px 70px rgba(0,0,0,.45);padding:16px;animation:bubNo .28s cubic-bezier(.2,.9,.25,1.08);outline:0}
+.bub .bh{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.bub .bn{font-size:20px;font-weight:700;color:var(--hi)}.bub .bw{font-size:15.5px;margin-top:1px}.bub .bo{text-align:right;font-size:17px;font-weight:650;color:var(--hi);white-space:nowrap}
+.bub .bs{margin-top:12px;padding-top:10px;border-top:1px solid var(--ln)}.bub .bj{margin-top:10px}.bub .mj{margin-top:8px}
+.bub-act{width:min(100%,320px);background:var(--card);border:1px solid var(--ln2);border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.35);animation:bubNo .3s .04s cubic-bezier(.2,.9,.25,1.08) both}
+.bub-act button{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;min-height:48px;padding:12px 16px;border:0;border-top:1px solid var(--ln);background:none;font-size:17px;color:var(--tx);text-align:left}.bub-act button:first-child{border-top:0}.bub-act button:active{background:var(--hov)}.bub-act .bi{color:var(--mu2);font-size:18px}
+@keyframes bubBe{from{opacity:0}to{opacity:1}}@keyframes bubNo{from{transform:scale(.88);opacity:.2}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.bub-bg,.bub,.bub-act{animation:none}}
+@media (prefers-reduced-transparency:reduce){.bub-bg{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(0,0,0,.62)}}
 .spmenu{position:fixed;z-index:60;min-width:210px;background:var(--card);border:1px solid var(--ln2);border-radius:12px;padding:5px;box-shadow:var(--sh)}
 .spmenu button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;background:none;border-radius:8px;font-size:13.5px;color:var(--tx)}.spmenu button:hover{background:var(--hov)}
-@media (pointer:coarse){.spsor,.cst tr.sor{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}}
+@media (pointer:coarse){.spsor,.cst tr.sor,.c[data-no],.spnb .ch{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}}
 @media (max-width:760px){.spsor{grid-template-columns:12px 1fr auto 36px;grid-template-areas:"d no ar b" "d nev nev b" "d st st st"}.spsor>.dot{grid-area:d}.spsor>.sp1{grid-area:no}.spsor>.spnev{grid-area:nev}.spsor>.spar{grid-area:ar}.spsor>.spst{grid-area:st}.spsor>.spbell,.spsor>.spbell0{grid-area:b}}
 .cskartyak{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px}
 .csk{background:var(--card);border:1px solid var(--ln);border-radius:11px;padding:9px 13px;min-width:112px;text-align:left}
@@ -337,7 +346,10 @@ body.has-insp .abar{left:calc(50% + 110px - 180px)}
 .kcol.over{outline:2px dashed var(--acc);outline-offset:-3px}
 .kcol h3{margin:2px 4px 2px;font-size:12px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--mu);display:flex;justify-content:space-between}
 .kcard{background:var(--bg);border:1px solid var(--ln);border-radius:9px;padding:9px 10px;cursor:grab;font-size:13.5px;text-align:left;width:100%;color:var(--tx);display:block}
-.kcard:hover{border-color:var(--ln2)}.kcard.mozog{opacity:.4}
+.kcard:hover{border-color:var(--ln2)}.kcard.mozog{opacity:.35}
+.kdrag{z-index:90;pointer-events:none;box-shadow:0 18px 44px rgba(0,0,0,.5);border-color:var(--acc)!important;background:var(--card)!important;transition:none;cursor:grabbing}
+body.tb-huz{overflow:hidden;-webkit-user-select:none;user-select:none}
+@media (pointer:coarse){#tb .kcard{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}}
 .kcard{padding-right:30px}.kx{position:absolute;top:4px;right:4px;width:22px;height:22px;border:0;border-radius:11px;background:none;color:var(--mu);font-size:12px;line-height:22px;padding:0;opacity:0;cursor:pointer}
 .kcard:hover .kx,.kx:focus-visible{opacity:1}.kx:hover{background:var(--hov);color:var(--r)}
 @media (pointer:coarse){.kx{opacity:.85}}
@@ -439,6 +451,8 @@ body.has-insp .abar{left:calc(50% + 110px - 180px)}
 .tbt{display:flex;justify-content:space-between;gap:12px;align-items:center;background:var(--side);border-radius:10px;padding:10px 12px;margin-top:8px}
 #tb-talalat{margin-bottom:2px}#tb-talalat>.sub{margin-top:8px}
 .krb{display:flex;gap:10px;justify-content:space-between;align-items:flex-start;background:var(--hov);border-radius:10px;padding:10px 12px}
+.tk-ert{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:13.5px;cursor:pointer}.tk-ert .cb{margin-top:2px}
+.kchips .btn.on{background:var(--acc);color:var(--accTx);border-color:var(--acc)}
 .kpre,.kchips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.kpre .btn,.kchips .btn{padding:3px 10px;font-size:12.5px}
 
 .nav[data-t="level"]{display:none}
@@ -595,14 +609,16 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
-var AKU_VERZIO='2026-11-15 · 31';
+var AKU_VERZIO='2026-11-15 · 32';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
   modal('<h3>Több</h3><div class="tobb-l">'+li('vr','Visszáruk','c-vr')+li('ue','Utánvétek','c-ue')+li('mate5','MATE kupon','c-mate5')+li('naplo','Export napló','')+'</div>'+
+    '<div class="kl2">Értesítések</div><div id="push-doboz" class="push-doboz"></div>'+
     '<div class="kl2">Megjelenés</div><div class="seg">'+th('system','Rendszer')+th('light','Világos')+th('dark','Sötét')+'</div>'+
     (window.AKU_WEB?'<div class="tobb-l" style="margin-top:14px"><button class="tobb-i" onclick="zar();AKU_KAPCSOLAT()">Kapcsolat…</button><button class="tobb-i" style="color:var(--r)" onclick="AKU_KILEP()">Kijelentkezés</button></div>':'')+
     '<div class="sub" style="margin:14px 4px 0">AKU 2.0 · verzió '+AKU_VERZIO+(D&&D.ido?' · betöltés '+(D.ido.ossz/1000).toFixed(1)+' s ('+Object.keys(D.ido.reszek).map(function(k){return k+' '+(D.ido.reszek[k]/1000).toFixed(1)}).join(', ')+')':'')+'</div><div class="gombok"><button class="btn fo" onclick="zar()">Kész</button></div>');
+  try{pushRajz()}catch(e){}
 }
 function ful(n){FUL=n;var tb=document.getElementById('nav-tobb');if(tb)tb.classList.toggle('on',['vr','ue','mate5','naplo'].indexOf(n)>=0);var mm=document.getElementById('maim');if(mm)mm.classList.toggle('kihagy',n!=='bent');document.querySelectorAll('.nav').forEach(function(b){b.classList.toggle('on',b.dataset.t===n)});
   ['bent','csomag','spec','vr','ue','level','mate5','teendo','naplo'].forEach(function(x){document.getElementById('p-'+x).hidden=x!==n});
@@ -1665,13 +1681,46 @@ function spMenuRend(no,x,y){   // bent lévő rendelés
   t.push(['Rendelés megnyitása',"ful('bent');nyit('"+no+"')"]);
   spMenuKi(t,x,y);
 }
+// ===== ELŐNÉZETI BUBORÉK (hosszú nyomás, mint az iOS helyi menüje előnézettel) =====
+// Közepes-nagy, lekerekített buborék az elmosott háttér előtt; a tartalma görgethető, alatta rövid műveletlista (HIG: context-menus.md › Mobile: előnézet, kevés elem).
+function bubZar(){var b=document.getElementById('bub');if(b)b.remove();document.body.style.overflow='';}
+function bubNyit(tart,akciok){
+  bubZar();spMenuZar();
+  var b=document.createElement('div');b.id='bub';b.className='bub-bg';b.setAttribute('role','dialog');b.setAttribute('aria-modal','true');b.setAttribute('aria-label','Előnézet');
+  b.onclick=function(e){if(e.target===b)bubZar()};
+  b.innerHTML='<div class="bub" tabindex="-1">'+tart+'</div><div class="bub-act">'+akciok.map(function(a){return '<button onclick="bubZar();'+a[1]+'"><span>'+a[0]+'</span><span class="bi">'+(a[2]||'')+'</span></button>'}).join('')+'</div>';
+  document.body.appendChild(b);document.body.style.overflow='hidden';
+  try{if(navigator.vibrate)navigator.vibrate(10)}catch(e){}
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')bubZar()});
+function bubRend(no){   // bent lévő rendelés
+  var o=((D&&D.rendelesek)||[]).filter(function(x){return x.no===no})[0];if(!o)return;
+  var be=((spB().kezi[no]||{}).f===1);
+  bubNyit('<div class="bh"><div style="min-width:0"><div class="bn">'+esc(o.no)+'</div><div class="bw">'+esc(o.nev)+'</div><div class="sub">'+esc(o.varos)+' · '+esc(mikor(o.datum))+'</div></div><div class="bo">'+ft(o.osszeg)+'<div class="sub">'+esc(o.fizetes||'')+'</div></div></div>'+
+    '<div class="bs">'+tetelHtml(o,false)+(o.ragaszto?'<div class="sub rag">+ '+o.ragaszto+' db ragasztó</div>':'')+'</div>'+
+    ((o.jelek||[]).length?'<div class="bj">'+o.jelek.map(function(j){return '<span class="tg t-'+esc(j.s||'szurke')+'">'+esc(j.t)+'</span>'}).join(' ')+'</div>':'')+
+    (o.megjegyzes?'<div class="mj">„'+esc(o.megjegyzes)+'”</div>':'')+((o.attr&&o.attr.length)?'<div class="mj">'+o.attr.map(esc).join(' · ')+'</div>':'')+
+    '<div class="sub" style="margin-top:10px">'+esc(((o.irsz||'')+' '+(o.varos||'')+(o.cim?', '+o.cim:'')).trim())+(o.tel?' · '+esc(o.tel):'')+'</div>'+(o.email?'<div class="sub">'+esc(o.email)+'</div>':''),
+    [[be?'Kivétel a Speciálisból':'Felvétel a Speciális fülre',"spMent('"+esc(no)+"','f',"+(be?'null':'1')+",'"+(be?'Kikerült a Speciálisból':'Felvéve a Speciális fülre')+"')",be?'★':'☆'],
+     ['Teendő ehhez',"tbRendelesbol('"+esc(no)+"')",'＋'],
+     ['Rendelés megnyitása',"ful('bent');nyit('"+esc(no)+"')",'›']]);
+}
+function bubCsomag(sz){   // csomag (Csomagok, Speciális, „Nem ért be”)
+  var r=spSor(sz);if(!r||!r.sz)return;
+  var z=spZ(r),benne=spBenne(r,maNap()),cs=spCsengo(r),o=spAll(r,maNap());
+  bubNyit('<div class="bh"><div style="min-width:0"><div class="bn">'+esc(r.no||'–')+'</div><div class="bw">'+esc(r.nev||'Ismeretlen címzett')+'</div><div class="sub">'+esc(r.varos||'')+'</div></div><div class="bo">'+(r.uv?ft(r.uv)+'<div class="sub">utánvét</div>':'')+'</div></div>'+
+    '<div style="margin:8px 0 4px"><span class="tg t-'+(o.szin==='p'?'piros':o.szin==='g'?'zold':o.szin==='y'?'sarga':'szurke')+'">'+esc(o.t)+'</span></div>'+csDet(r),
+    [[benne&&z.f===1?'Figyelés kikapcsolása':benne?'Elrejtés a Speciálisból':'Felvétel a Speciális fülre',benne&&z.f===1?"spMent('"+z.fk+"','f',null,'Kikerült a Speciálisból')":benne?"spMent('"+esc(sz)+"','f',0,'Elrejtve a Speciálisból')":"spMent('"+esc(sz)+"','f',1,'Hozzáadva a Speciálishoz')",benne?'★':'☆'],
+     [cs?'Értesítés kikapcsolása':'Értesítés bekapcsolása',"spCsengoKapcs('"+esc(sz)+"')",cs?'🔕':'🔔'],
+     ['✉ Piszkozat a Pannonnak',"spEmail(['"+esc(sz)+"'])",''],
+     ['Teendő ehhez',"tbCsomagbol('"+esc(sz)+"')",'＋']]);
+}
 (function(){
   var SEL='.spsor[data-sz],.spsor[data-no],.spnb .ch[data-sz],tr.sor[data-sz],.c[data-no]';
   var sorEl=function(t){return t&&t.closest?t.closest(SEL):null};
   var nyit_=function(s,x,y,erint){var sz=s.getAttribute('data-sz'),no=s.getAttribute('data-no');
-    if(sz)spMenu(sz,x,y);
-    else if(no&&erint&&s.classList.contains('c')){if(AKT!==no)nyit(no);}   // telefonon a bent lévő rendelés hosszú nyomása megnyitja a rendelést (felül a ★ Speciális gombbal)
-    else if(no)spMenuRend(no,x,y);};
+    if(erint){if(sz)bubCsomag(sz);else if(no)bubRend(no);return;}   // érintőképernyőn: előnézeti buborék
+    if(sz)spMenu(sz,x,y);else if(no)spMenuRend(no,x,y);};   // egérrel (jobb klikk): kis menü
   document.addEventListener('contextmenu',function(e){var s=sorEl(e.target);if(!s)return;e.preventDefault();if(Date.now()-SP_LONG<1000)return;nyit_(s,e.clientX,e.clientY,false);});
   var tm=null,px=0,py=0;
   document.addEventListener('touchstart',function(e){var s=sorEl(e.target);if(!s||e.touches.length!==1)return;px=e.touches[0].clientX;py=e.touches[0].clientY;
@@ -1926,9 +1975,9 @@ function rajzMate5(){
 // ===== TEENDŐK (Trello-szerű tábla) – helyben tárolva és a szerverrel szinkronizálva (a Mac és a telefon közös táblája) =====
 var TB=null,TB_T=null,TB_E=null,TB_EM=[],TB_DRAG=null,TB_Q='',TB_QT=null,TB_RL=[],TB_RT=null,TB_TAL=[];
 var TB_OSZ=[['teendo','Teendő'],['folyamat','Folyamatban'],['var','Várakozik'],['kesz','Kész']];
-var TB_CIMKE={ragaszto:['Ragasztó','sarga'],visszaru:['Visszáru','lila'],hivas:['Hívás','kek'],egyeb:['Egyéb','szurke']};
+var TB_CIMKE={ragaszto:['Ragasztó','sarga'],visszaru:['Visszáru','lila'],hivas:['Hívás','kek'],potlas:['Pótlás / csere','narancs'],egyeb:['Egyéb','szurke']};
 var TB_FOLY=['Vevő jelezte a visszaküldést','Visszaküldési cím / címke elküldve','Csomag megérkezett','Ellenőrzés (sérülés, mennyiség)','Visszatérítés vagy csere intézve','Visszáru-listára / raktárba felvéve'];
-var TB_CHIP=[['Ragasztót küldeni','ragaszto'],['Visszahívni','hivas'],['Pótlás / csere küldeni','egyeb'],['Visszaküldés intézése','visszaru']];
+var TB_CHIP=[['Ragasztót küldeni','ragaszto'],['Visszahívni','hivas'],['Pótlás / csere küldeni','potlas'],['Visszaküldés intézése','visszaru']];
 function tbId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 // dátum: n nap múlva, vagy 'hetfo' = a következő hétfő (YYYY-MM-DD, helyi idő)
 function tbDatum(n){var d=new Date();if(n==='hetfo')d.setDate(d.getDate()+((8-d.getDay())%7||7));else d.setDate(d.getDate()+n);
@@ -1982,7 +2031,54 @@ function tbRendLookup(q,cb){
 }
 function tbRendAuto(id,no){tbRendLookup(no,function(r){var m=(r||[]).filter(function(x){return x.no===no})[0];if(!m)return;
   var k=TB.kartyak.filter(function(x){return x.id===id})[0];if(!k||k.rend)return;k.rend=tbSnap(m);k.modositva=new Date().toISOString();tbMent();tbRajz();});}
+// ===== PUSH-ÉRTESÍTÉS (telefonos webapp) =====
+// A szerver a Cloudflare átjátszón át küld; iPhone-on csak a kezdőképernyőre tett appban működik (iOS 16.4+). Az engedélyt gombnyomásra kérjük.
+var VAPID_PUBLIC='BPqm1WoKbs-qhC1TM_RYdBVXPjZCmE3XvfrxNyeIx07krwpK_sZxw1CSwl8obKjt4vIOxWQBipzi9HaRIREZDhw';
+function pushU8(b64){var p='='.repeat((4-b64.length%4)%4),s=(b64+p).replace(/-/g,'+').replace(/_/g,'/'),r=atob(s),o=new Uint8Array(r.length);for(var i=0;i<r.length;i++)o[i]=r.charCodeAt(i);return o;}
+function pushTamogatott(){return !!(window.AKU_WEB&&'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window);}
+function pushEszkoz(){var u=navigator.userAgent||'';return /iPhone/.test(u)?'iPhone':/iPad/.test(u)?'iPad':/Android/.test(u)?'Android':'Böngésző';}
+function pushRajz(){
+  var el=document.getElementById('push-doboz');if(!el)return;
+  if(!window.AKU_WEB){el.innerHTML='<div class="sub">Az értesítések a telefonos appban érhetők el.</div>';return;}
+  if(!pushTamogatott()){el.innerHTML='<div class="sub">iPhone-on az értesítés csak a kezdőképernyőre tett appban működik (iOS 16.4 vagy újabb): Megosztás → Hozzáadás a főképernyőhöz.</div>';return;}
+  if(Notification.permission==='denied'){el.innerHTML='<div class="sub">Az értesítés le van tiltva ennél az appnál. Engedélyezd: Beállítások → Értesítések → AKU.</div>';return;}
+  el.innerHTML='<div class="sub">Állapot…</div>';
+  navigator.serviceWorker.ready.then(function(reg){return reg.pushManager.getSubscription()}).then(function(sub){
+    var d=document.getElementById('push-doboz');if(!d)return;
+    if(!sub){d.innerHTML='<button class="btn fo" onclick="pushBe()">Értesítések bekapcsolása</button>';return;}
+    google.script.run.withSuccessHandler(function(a){var d2=document.getElementById('push-doboz');if(!d2)return;
+      if(!a.ezEszkoz){d2.innerHTML='<div class="sub">Az eszköz feliratkozása nincs a szerveren.</div><button class="btn fo" onclick="pushBe()">Újra bekapcsolás</button>';return;}
+      d2.innerHTML='<div class="sub" style="margin-bottom:8px">'+(a.titok?'Bekapcsolva ezen az eszközön ('+a.db+' eszköz összesen).':'<b style="color:var(--r)">A szerveren még nincs beállítva a PUSH_SECRET, ezért nem tud értesítést küldeni.</b>')+'</div>'+
+        '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="pushTesztGomb(this)">Teszt értesítés</button><button class="btn" onclick="pushKi()">Kikapcsolás</button></div>';})
+    .withFailureHandler(function(e){var d3=document.getElementById('push-doboz');if(d3)d3.innerHTML='<div class="sub c-r">Hiba: '+esc(e.message)+'</div>';}).pushAllapot(KULCS,sub.endpoint);
+  }).catch(function(e){var d=document.getElementById('push-doboz');if(d)d.innerHTML='<div class="sub c-r">Hiba: '+esc(e&&e.message||e)+'</div>';});
+}
+function pushBe(){
+  Notification.requestPermission().then(function(p){
+    if(p!=='granted'){pushRajz();return;}
+    return navigator.serviceWorker.ready.then(function(reg){return reg.pushManager.getSubscription().then(function(s){return s||reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:pushU8(VAPID_PUBLIC)})})}).then(function(sub){
+      google.script.run.withSuccessHandler(function(){toast('Értesítések bekapcsolva','ok',5);pushRajz();})
+        .withFailureHandler(function(e){toast('Hiba: '+esc(e.message),'hiba',0);pushRajz();}).pushFeliratkozas(KULCS,JSON.stringify(sub),pushEszkoz());
+    });
+  }).catch(function(e){toast('Nem sikerült bekapcsolni: '+esc(e&&e.message||e),'hiba',0);pushRajz();});
+}
+function pushKi(){
+  navigator.serviceWorker.ready.then(function(reg){return reg.pushManager.getSubscription()}).then(function(sub){
+    if(!sub){pushRajz();return;}var ep=sub.endpoint;
+    return sub.unsubscribe().then(function(){google.script.run.withSuccessHandler(function(){toast('Értesítések kikapcsolva','ok',4);pushRajz();}).withFailureHandler(function(){pushRajz();}).pushLeiratkozas(KULCS,ep);});
+  });
+}
+function pushTesztGomb(b){
+  if(b){b.disabled=true;b.textContent='Küldés…';}
+  google.script.run.withSuccessHandler(function(r){if(b){b.disabled=false;b.textContent='Teszt értesítés';}toast(r.db?'Teszt értesítés elküldve ('+r.db+' eszköz)':'Nem ment ki sehova, nézd meg a beállítást','ok',5);})
+    .withFailureHandler(function(e){if(b){b.disabled=false;b.textContent='Teszt értesítés';}toast('Hiba: '+esc(e.message),'hiba',0);}).pushTeszt(KULCS);
+}
+// értesítésre koppintás: a megfelelő fülre ugrik
+function pushFul(t){if(['bent','csomag','spec','vr','ue','level','mate5','teendo','naplo'].indexOf(t)>=0)try{ful(t)}catch(e){}}
+function pushUzenet(e){var d=(e&&e.data)||{};if(d.aku==='ful')pushFul(d.tab);}
+if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',pushUzenet);
 function tbHatHtml(k){
+  return '';
   if(!k.hatarido)return '';
   var ma=maNap();
   if(k.oszlop==='kesz')return '<span>'+honapNap(k.hatarido)+'</span>';
@@ -2001,9 +2097,9 @@ function tbRajz(){
       '<h3><span>'+c[1]+'</span><span>'+L.length+'</span></h3>'+
       L.map(function(k){
         var lista=k.lista||[],kesz=lista.filter(function(x){return x.k}).length,r=k.rend;
-        return '<div role="button" tabindex="0" class="kcard'+(k.oszlop==='kesz'?' kesz':'')+'" draggable="true" data-id="'+k.id+'" ondragstart="tbDS(event,\''+k.id+'\')" ondragend="tbDE()" onkeydown="if(event.key===\'Enter\')tbSzerk(\''+k.id+'\')" onclick="tbSzerk(\''+k.id+'\')">'+
+        return '<div role="button" tabindex="0" class="kcard'+(k.oszlop==='kesz'?' kesz':'')+'" draggable="'+(window.matchMedia&&matchMedia('(pointer:coarse)').matches?'false':'true')+'" data-id="'+k.id+'" ondragstart="tbDS(event,\''+k.id+'\')" ondragend="tbDE()" onkeydown="if(event.key===\'Enter\')tbSzerk(\''+k.id+'\')" onclick="tbSzerk(\''+k.id+'\')">'+
           '<div class="kt">'+esc(k.cim)+'</div>'+
-          (r?'<div class="kr">'+esc(r.nev)+(r.varos?' · '+esc(r.varos):'')+(r.tel?' · '+tbTelLink(r.tel):'')+'</div>':'')+
+          (r?'<div class="kr">'+esc(r.nev)+(r.varos?' · '+esc(r.varos):'')+(r.tel?' · '+tbTelLink(r.tel):'')+'</div>':(k.kihez?'<div class="kr">'+esc(k.kihez)+'</div>':''))+
           (k.jegyzet?'<div class="kj">'+esc(k.jegyzet)+'</div>':'')+
           '<div class="kmeta">'+(k.cimke&&TB_CIMKE[k.cimke]?'<span class="tg t-'+TB_CIMKE[k.cimke][1]+'">'+TB_CIMKE[k.cimke][0]+'</span>':'')+
           (k.rendeles?'<span class="tg t-kek" title="Megnyitás a Shopify-ban" onclick="event.stopPropagation();window.open(tbRendelesLink(\''+esc(k.rendeles)+'\'),\'_blank\')">'+esc(k.rendeles)+' ↗</span>':'')+
@@ -2036,19 +2132,68 @@ function tbDE(){TB_DRAG=null;document.querySelectorAll('.kcard.mozog').forEach(f
 function tbDO(e,col){if(!TB_DRAG)return;e.preventDefault();col.classList.add('over');}
 function tbDrop(e,col){
   e.preventDefault();col.classList.remove('over');if(!TB_DRAG)return;
-  var k=TB.kartyak.filter(function(x){return x.id===TB_DRAG})[0];if(!k)return;
-  var o=col.dataset.o,kartyak=[].slice.call(col.querySelectorAll('.kcard')).filter(function(c){return c.dataset.id!==k.id}),elotte=null;
-  for(var i=0;i<kartyak.length;i++){var r=kartyak[i].getBoundingClientRect();if(e.clientY<r.top+r.height/2){elotte=kartyak[i].dataset.id;break;}}
+  tbMozgat(TB_DRAG,col.dataset.o,e.clientY);tbDE();
+}
+// a kártyát az o oszlopba teszi, a clientY magasságnak megfelelő helyre (egér és érintés is ezt használja)
+function tbMozgat(id,o,clientY){
+  var k=TB.kartyak.filter(function(x){return x.id===id})[0];if(!k)return;
+  var col=document.querySelector('#tb .kcol[data-o="'+o+'"]');if(!col)return;
+  var kartyak=[].slice.call(col.querySelectorAll('.kcard')).filter(function(c){return c.dataset.id!==k.id}),elotte=null;
+  for(var i=0;i<kartyak.length;i++){var r=kartyak[i].getBoundingClientRect();if(clientY<r.top+r.height/2){elotte=kartyak[i].dataset.id;break;}}
   var sor=tbOszlop(o).filter(function(x){return x.id!==k.id});
   var idx=elotte?sor.map(function(x){return x.id}).indexOf(elotte):sor.length;
   sor.splice(idx,0,k);k.oszlop=o;k.modositva=new Date().toISOString();
-  var most=new Date().toISOString();sor.forEach(function(x,i){if(x===k||x.sz!==i){x.sz=i;x.modositva=most}});tbMent();tbRajz();tbDE();
+  var most=new Date().toISOString();sor.forEach(function(x,i){if(x===k||x.sz!==i){x.sz=i;x.modositva=most}});tbMent();tbRajz();
 }
+// ===== Teendők: hosszú nyomással megfogod a kártyát, és húzod az oszlopok között (érintőképernyőn) =====
+// A kártya „felemelkedik”; ha az ujjad a képernyő jobb (bal) szélére ér, a tábla finoman a következő (előző) oszlopra csúszik; elengedéskor oda kerül, ahol az ujjad van.
+var TB_HUZ=0;
+(function(){
+  var tm=null,S=null,sx=0,sy=0,CEL='#tb .kcard[data-id]';
+  var kartya=function(t){return (t&&t.closest&&!t.closest('button,input,textarea,a'))?t.closest(CEL):null};
+  function oszlopSzel(irany){var c=document.getElementById('tb'),cols=[].slice.call(c.querySelectorAll('.kcol')),cr=c.getBoundingClientRect(),kozep=c.scrollLeft+c.clientWidth/2,idx=0;
+    cols.forEach(function(x,i){var l=x.getBoundingClientRect().left-cr.left+c.scrollLeft;if(l<=kozep)idx=i});
+    var u=Math.max(0,Math.min(cols.length-1,idx+irany)),oc=cols[u],ol=oc.getBoundingClientRect().left-cr.left+c.scrollLeft;
+    c.scrollTo({left:ol-(c.clientWidth-oc.offsetWidth)/2,behavior:'smooth'});}
+  function mozog(e){
+    if(!S)return;e.preventDefault();var t=e.touches[0];if(!t)return;
+    S.x=t.clientX;S.y=t.clientY;S.klon.style.transform='translate('+(S.x-S.dx)+'px,'+(S.y-S.dy)+'px) scale(1.03)';
+    S.klon.style.visibility='hidden';var el=document.elementFromPoint(S.x,S.y);S.klon.style.visibility='';
+    var col=el&&el.closest?el.closest('#tb .kcol'):null;
+    document.querySelectorAll('#tb .kcol.over').forEach(function(c){if(c!==col)c.classList.remove('over')});
+    if(col)col.classList.add('over');S.col=col;
+    var W=window.innerWidth,zona=Math.max(48,W*0.14),ir=S.x>W-zona?1:S.x<zona?-1:0;
+    if(ir!==S.ir){S.ir=ir;clearTimeout(S.dw);
+      if(ir)S.dw=setTimeout(function ugor(){oszlopSzel(ir);try{if(navigator.vibrate)navigator.vibrate(8)}catch(x){}if(S&&S.ir===ir)S.dw=setTimeout(ugor,700);},320);}
+  }
+  function vege(){
+    document.removeEventListener('touchmove',mozog,{passive:false});document.removeEventListener('touchend',vege);document.removeEventListener('touchcancel',vege);
+    if(!S)return;var s=S;S=null;TB_DRAG=null;clearTimeout(s.dw);if(s.klon)s.klon.remove();document.body.classList.remove('tb-huz');
+    document.querySelectorAll('#tb .kcol.over').forEach(function(c){c.classList.remove('over')});TB_HUZ=Date.now();
+    if(s.col)tbMozgat(s.id,s.col.dataset.o,s.y);else tbRajz();
+  }
+  document.addEventListener('touchstart',function(e){
+    if(FUL!=='teendo'||e.touches.length!==1)return;var k=kartya(e.target);if(!k)return;
+    sx=e.touches[0].clientX;sy=e.touches[0].clientY;clearTimeout(tm);
+    var kid=k.dataset.id;TB_DRAG='?';   // amíg a hosszú nyomás készül, a szinkron ne rajzolja újra a táblát (az ujj érintése a kártyához kötött)
+    tm=setTimeout(function(){tm=null;k=document.querySelector('#tb .kcard[data-id="'+kid+'"]');if(!k)return;   // közben újrarajzolhatták a táblát (szinkron): a mostani kártyát fogjuk meg
+      var r=k.getBoundingClientRect(),kl=k.cloneNode(true);
+      kl.classList.add('kdrag');kl.style.cssText='position:fixed;left:0;top:0;width:'+r.width+'px;margin:0;transform:translate('+r.left+'px,'+r.top+'px) scale(1.03)';
+      document.body.appendChild(kl);k.classList.add('mozog');document.body.classList.add('tb-huz');
+      TB_DRAG=k.dataset.id;S={id:k.dataset.id,klon:kl,dx:sx-r.left,dy:sy-r.top,x:sx,y:sy,ir:0,dw:null,col:k.closest('.kcol')};
+      document.addEventListener('touchmove',mozog,{passive:false});document.addEventListener('touchend',vege);document.addEventListener('touchcancel',vege);
+      try{if(navigator.vibrate)navigator.vibrate(12)}catch(x){}
+    },450);},{passive:true});
+  var megse=function(){if(tm){clearTimeout(tm);tm=null;if(!S&&TB_DRAG==='?')TB_DRAG=null}};
+  document.addEventListener('touchmove',function(e){if(tm&&e.touches[0]&&(Math.abs(e.touches[0].clientX-sx)>10||Math.abs(e.touches[0].clientY-sy)>10))megse();},{passive:true});
+  document.addEventListener('touchend',megse,{passive:true});document.addEventListener('touchcancel',megse,{passive:true});
+  // a húzás utáni „kattintás” ne nyissa meg a kártyát
+  document.addEventListener('click',function(e){if(Date.now()-TB_HUZ<700&&e.target.closest&&e.target.closest('#tb .kcard')){e.stopPropagation();e.preventDefault();}},true);
+})();
 function tbUjKartya(o,cim){
-  var rend=(cim.match(/#\d{3,6}/)||[''])[0],low=cim.toLowerCase(),rs=null;
+  var rend=(cim.match(/#\d{3,6}/)||[''])[0],rs=null;
   if(rend&&D&&D.rendelesek){var oo=D.rendelesek.filter(function(x){return x.no===rend})[0];if(oo)rs=tbSnap(oo);}
-  var cimke=/ragaszt/.test(low)?'ragaszto':/vissz[aá]r|visszak[uü]ld|visszaker/.test(low)?'visszaru':/h[ií]v|telefon/.test(low)?'hivas':'egyeb';
-  var sor=tbOszlop(o),most=new Date().toISOString(),k={id:tbId(),oszlop:o,cim:cim,jegyzet:'',rendeles:rend,rend:rs,cimke:cimke,hatarido:'',lista:[],email:null,letrehozva:most,modositva:most,sz:sor.length?sor[sor.length-1].sz+1:0};
+  var sor=tbOszlop(o),most=new Date().toISOString(),k={id:tbId(),oszlop:o,cim:cim,jegyzet:'',rendeles:rend,kihez:'',rend:rs,cimke:'',ert:true,lista:[],email:null,letrehozva:most,modositva:most,sz:sor.length?sor[sor.length-1].sz+1:0};
   TB.kartyak.push(k);if(rend&&!rs)tbRendAuto(k.id,rend);return k;
 }
 function tbGyors(o,inp){var t=inp.value.trim();if(!t)return;tbUjKartya(o,t);tbMent();tbRajz();
@@ -2082,7 +2227,7 @@ function tbVissza(){
 function tbSzerk(id,o){
   tbBetolt(function(){
     var k=id?TB.kartyak.filter(function(x){return x.id===id})[0]:null;
-    TB_E=k?JSON.parse(JSON.stringify(k)):{id:null,oszlop:o||'teendo',cim:'',jegyzet:'',rendeles:'',rend:null,cimke:'egyeb',hatarido:'',lista:[],email:null};
+    TB_E=k?JSON.parse(JSON.stringify(k)):{id:null,oszlop:o||'teendo',cim:'',jegyzet:'',rendeles:'',kihez:'',rend:null,cimke:'',ert:true,lista:[],email:null};
     tbModal();
   });
 }
@@ -2090,7 +2235,7 @@ function tbSzerk(id,o){
 function tbElo(o){tbBetolt(function(){
   var rend=o.rend||null,no=o.no||'';
   if(!rend&&no&&D&&D.rendelesek){var x=D.rendelesek.filter(function(y){return y.no===no})[0];if(x)rend=tbSnap(x);}
-  TB_E={id:null,oszlop:'teendo',cim:o.cim||'',jegyzet:o.jegyzet||'',rendeles:rend?rend.no:no,rend:rend,cimke:o.cimke||'egyeb',hatarido:o.hatarido||'',lista:o.lista||[],email:o.email||null};
+  TB_E={id:null,oszlop:'teendo',cim:o.cim||'',jegyzet:o.jegyzet||'',rendeles:rend?rend.no:no,kihez:'',rend:rend,cimke:o.cimke||'',ert:true,lista:o.lista||[],email:o.email||null};
   tbModal();
   if(no&&!rend)tbRendLookup(no,function(r){var m=(r||[]).filter(function(x){return x.no===no})[0];if(!m||!TB_E||TB_E.rend)return;
     TB_E.rend=tbSnap(m);TB_E.rendeles=m.no;var b=document.getElementById('tk-rendbox');if(b)b.innerHTML=tbRendBlokk();});
@@ -2102,8 +2247,8 @@ function tbCsomagbol(sz){var r=csSorok().filter(function(x){return x.sz===sz})[0
   tbElo({cim:(r.no||'Csomag')+' – '+String(r.sz).slice(5,12),jegyzet:(r.nev||'')+' · '+((r.irsz||'')+' '+(r.varos||'')).trim()+(r.tel?' · '+r.tel:'')+'\nÁllapot: '+csAll(r).t,cimke:'egyeb',no:r.no||''});}
 function tbOlvas(){
   var g=function(i){var e=document.getElementById(i);return e?e.value:null};
-  if(g('tk-cim')===null)return;
-  TB_E.cim=g('tk-cim').trim();TB_E.jegyzet=g('tk-jeg');TB_E.cimke=g('tk-cimke');TB_E.hatarido=g('tk-hat');TB_E.oszlop=g('tk-osz');
+  if(g('tk-jeg')===null)return;
+  TB_E.szoveg=g('tk-jeg');var ec=document.getElementById('tk-ert');if(ec)TB_E.ert=ec.checked;
   var rr=g('tk-rend');if(rr!==null&&!TB_E.rend)TB_E.rendeles=rr.trim();
   TB_E.lista.forEach(function(x,i){var t=document.getElementById('tk-l'+i);if(t)x.t=t.value;});
 }
@@ -2112,7 +2257,7 @@ function tbRendBlokk(){
   if(r)return '<div class="krb"><div style="min-width:0"><b>'+esc(r.no)+'</b> · '+esc(r.nev)+'<div class="sub">'+esc(((r.irsz||'')+' '+(r.varos||'')+' '+(r.cim||'')).trim())+'</div>'+
     '<div class="sub">'+esc(tbRendSzov(r))+' · '+ft(r.osszeg)+(r.telj?' · '+esc(tbTelj(r.telj)):'')+'</div>'+(r.tel?'<div>'+tbTelLink(r.tel)+'</div>':'')+
     '<a target="_blank" href="'+esc(tbRendelesLink(r.no))+'">Megnyitás a Shopify-ban ↗</a></div><button class="btn" onclick="tbOlvas();TB_E.rend=null;TB_E.rendeles=\'\';tbModal()">Csere</button></div>';
-  return '<input type="text" id="tk-rend" value="'+esc(E.rendeles||'')+'" placeholder="Rendelésszám vagy név (pl. 9025)" oninput="tbRendGep()" autocomplete="off"><div id="tk-rendlista"></div>';
+  return '<input type="text" id="tk-rend" value="'+esc(E.rendeles||'')+'" placeholder="Rendelésszám vagy név (pl. 9025 vagy Kovács Anna)" oninput="tbRendGep()" autocomplete="off"><div class="sub" style="margin-top:4px">Névnél nem kell megvárni a keresést: amit beírsz, azonnal a kártyára kerül.</div><div id="tk-rendlista"></div>';
 }
 function tbRendGep(){
   clearTimeout(TB_RT);var q=document.getElementById('tk-rend').value.trim(),L=document.getElementById('tk-rendlista');TB_E.rendeles=q;
@@ -2123,37 +2268,35 @@ function tbRendGep(){
 }
 function tbRendValaszt(i){var r=TB_RL[i];if(!r)return;tbOlvas();TB_E.rend=tbSnap(r);TB_E.rendeles=r.no;tbModal();
   var c=document.getElementById('tk-jeg');if(c)c.focus();}
-function tbChip(i){tbOlvas();var c=TB_CHIP[i];TB_E.cim=(TB_E.rend?TB_E.rend.no+' – ':'')+c[0];TB_E.cimke=c[1];tbModal();
+function tbChip(i){tbOlvas();var c=TB_CHIP[i];TB_E.cimke=TB_E.cimke===c[1]?'':c[1];tbModal();   // csak a rovat (címke) kapcsol, a szöveget te írod
   var e=document.getElementById('tk-jeg');if(e){e.focus();e.setSelectionRange(e.value.length,e.value.length);}}
 function tbHat(n){var i=document.getElementById('tk-hat');if(i)i.value=n===null?'':tbDatum(n);}
 function tbModal(){
-  var E=TB_E;
-  modal('<h3>'+(E.id?'Kártya':'Új kártya')+'</h3>'+
-    '<label class="kl" for="tk-jeg">Teendő</label><textarea id="tk-jeg" placeholder="Mit kell csinálni? (pl. 9025 – 2 Trex küldeni, lemaradt)">'+esc(E.jegyzet)+'</textarea>'+
-    (!E.id&&E.rend?'<div class="kchips">'+TB_CHIP.map(function(c,i){return '<button class="btn" onclick="tbChip('+i+')">'+c[0]+'</button>'}).join('')+'</div>':'')+
-    '<label class="kl" for="tk-cim">Cím <span style="text-transform:none;letter-spacing:0;font-weight:400">(nem kötelező – ha üres, a szöveg első sora lesz)</span></label><input type="text" id="tk-cim" value="'+esc(E.cim)+'">'+
-    '<label class="kl" for="tk-rend">Rendelés</label><div id="tk-rendbox">'+tbRendBlokk()+'</div>'+
-    '<label class="kl" for="tk-hat">Határidő</label><input type="date" id="tk-hat" value="'+esc(E.hatarido)+'">'+
-    '<div class="kpre"><button class="btn" onclick="tbHat(0)">Ma</button><button class="btn" onclick="tbHat(1)">Holnap</button><button class="btn" onclick="tbHat(3)">+3 nap</button><button class="btn" onclick="tbHat(\'hetfo\')">Hétfő</button><button class="btn" onclick="tbHat(null)">Nincs határidő</button></div>'+
-    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label class="kl" for="tk-cimke">Címke</label><select id="tk-cimke">'+Object.keys(TB_CIMKE).map(function(c){return '<option value="'+c+'"'+(E.cimke===c?' selected':'')+'>'+TB_CIMKE[c][0]+'</option>'}).join('')+'</select></div>'+
-    '<div><label class="kl" for="tk-osz">Oszlop</label><select id="tk-osz">'+TB_OSZ.map(function(c){return '<option value="'+c[0]+'"'+(E.oszlop===c[0]?' selected':'')+'>'+c[1]+'</option>'}).join('')+'</select></div></div>'+
+  var E=TB_E,txt=E.szoveg!=null?E.szoveg:[E.cim,E.jegyzet].filter(String).join('\n');
+  modal('<h3>'+(E.id?'Teendő':'Új teendő')+'</h3>'+
+    '<div class="kchips" role="group" aria-label="Rovat">'+TB_CHIP.map(function(c,i){return '<button class="btn'+(E.cimke===c[1]?' on':'')+'" aria-pressed="'+(E.cimke===c[1])+'" onclick="tbChip('+i+')">'+c[0]+'</button>'}).join('')+'</div>'+
+    '<label class="kl" for="tk-jeg">Mit kell csinálni?</label><textarea id="tk-jeg" placeholder="pl. pecanra, 2 Trex lemaradt (az első sor lesz a kártya címe)">'+esc(txt)+'</textarea>'+
+    '<label class="kl" for="tk-rend">Kihez / melyik rendelés</label><div id="tk-rendbox">'+tbRendBlokk()+'</div>'+
     '<label class="kl">Lépések</label>'+E.lista.map(function(x,i){return '<div class="kcheck"><input type="checkbox" class="cb" aria-label="Kész" '+(x.k?'checked':'')+' onchange="TB_E.lista['+i+'].k=this.checked"><input type="text" id="tk-l'+i+'" value="'+esc(x.t)+'"><button class="xb" title="Törlés" aria-label="Lépés törlése" onclick="tbOlvas();TB_E.lista.splice('+i+',1);tbModal()">✕</button></div>'}).join('')+
     '<button class="btn" onclick="tbOlvas();TB_E.lista.push({t:\'\',k:false});tbModal();var l=document.getElementById(\'tk-l\'+(TB_E.lista.length-1));if(l)l.focus()">+ Lépés</button>'+
     (E.email?'<label class="kl">Email</label><a target="_blank" href="'+esc(E.email.link)+'">'+esc(E.email.targy||'Megnyitás a Gmailben')+' ↗</a><div class="sub">'+esc(E.email.felado||'')+'</div>':'')+
     '<div class="gombok">'+(E.id?'<button class="btn" style="margin-right:auto;color:var(--r)" onclick="tbTorol()">Törlés</button>':'')+'<button class="btn" onclick="zar()">Mégse</button><button class="btn fo" onclick="tbMentKartya()">Mentés</button></div>');
-  var c=document.getElementById(E.id||E.cim?'tk-cim':'tk-jeg');if(c&&!E.cim&&!E.jegyzet)c.focus();
+  var c=document.getElementById('tk-jeg');if(c&&!txt){c.focus();}
 }
 function tbMentKartya(){
   tbOlvas();var E=TB_E;
-  if(!E.cim){var sorok=String(E.jegyzet||'').split('\n');E.cim=sorok[0].trim().slice(0,140);if(E.cim){E.jegyzet=sorok.slice(1).join('\n').trim();}}
-  if(!E.cim&&E.rend)E.cim=E.rend.no;
+  var sorok=String(E.szoveg!=null?E.szoveg:[E.cim,E.jegyzet].filter(String).join('\n')).split('\n');   // egyetlen szövegmező: az első sor a cím
+  E.cim=sorok[0].trim().slice(0,140);E.jegyzet=sorok.slice(1).join('\n').trim();delete E.szoveg;
+  if(!E.rend){var kt=String(E.rendeles||'').trim();if(kt&&!/^#?\d{3,6}$/.test(kt)){E.kihez=kt;E.rendeles='';}else E.kihez='';}else E.kihez='';   // név: azonnal a kártyára kerül, nem kell rendelés
+  if(!E.cim){var rov=(TB_CHIP.filter(function(c){return c[1]===E.cimke})[0]||[''])[0];
+    if(rov)E.cim=(E.rend?E.rend.no+' – ':E.kihez?E.kihez+' – ':'')+rov;else if(E.rend)E.cim=E.rend.no;else if(E.kihez)E.cim=E.kihez;}
   if(!E.cim){var c=document.getElementById('tk-jeg');if(c)c.focus();return;}
   if(!E.rend&&E.rendeles){var no=/^\d+$/.test(E.rendeles)?'#'+E.rendeles:E.rendeles,oo=D&&D.rendelesek&&D.rendelesek.filter(function(x){return x.no===no})[0];if(oo){E.rend=tbSnap(oo);E.rendeles=oo.no;}}
   if(E.rend)E.rendeles=E.rend.no;
   E.lista=E.lista.filter(function(x){return x.t.trim()});E.modositva=new Date().toISOString();
   var bekotni=null;
   if(E.id){var k=TB.kartyak.filter(function(x){return x.id===E.id})[0];if(k){var regi=k.oszlop;Object.assign(k,E);if(regi!==E.oszlop){var s=tbOszlop(E.oszlop).filter(function(x){return x.id!==k.id});k.sz=s.length?s[s.length-1].sz+1:0;}}}
-  else{var sor=tbOszlop(E.oszlop);E.id=tbId();E.letrehozva=E.modositva;E.sz=sor.length?sor[sor.length-1].sz+1:0;TB.kartyak.push(E);if(!E.rend&&/^#\d{3,6}$/.test(E.rendeles||''))bekotni=[E.id,E.rendeles];}
+  else{E.oszlop='teendo';var sor=tbOszlop(E.oszlop);E.id=tbId();E.letrehozva=E.modositva;E.sz=sor.length?sor[sor.length-1].sz+1:0;TB.kartyak.push(E);if(!E.rend&&/^#\d{3,6}$/.test(E.rendeles||''))bekotni=[E.id,E.rendeles];}
   tbMent();tbRajz();zar();if(bekotni)tbRendAuto(bekotni[0],bekotni[1]);
 }
 function tbTorol(){
@@ -2222,6 +2365,7 @@ function levelTeendo(i){
 var CJ=dCacheOlvas();
 if(CJ){D=CJ.d;try{rajz();}catch(e){D=null;}var uu=document.getElementById('upd');if(uu&&D)uu.textContent='Mentett adat · frissítés…';}
 betolt(false);
+if(location.hash)pushFul(location.hash.slice(1));   // értesítésből induló app: a megfelelő fülre
 // Magától frissül: 3 percenként, és amikor visszatérsz az ablakhoz (ha az adat 2 percnél régebbi)
 setInterval(function(){frissitHaRegi(170000);tbSync()},60*1000);
 window.addEventListener('focus',function(){frissitHaRegi(120000);tbSync()});
