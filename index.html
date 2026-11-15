@@ -546,7 +546,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
-var AKU_VERZIO='2026-11-10 · 28';
+var AKU_VERZIO='2026-11-15 · 29';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -823,7 +823,12 @@ function korabbi(id){
   }).withFailureHandler(function(e){modal(fej+'<div class="note err">Hiba: '+esc(e.message)+'</div><div class="gombok"><button class="btn" onclick="zar()">Bezár</button></div>',true);})
   .korabbiRendelesek(KULCS,id);
 }
-function nyit(no){AKT=AKT===no?null:no;rajzBent();
+function nyit(no){
+  // a kattintott sor a képernyőn ugyanott maradjon: a részletező panel megnyitásakor a lista keskenyebb lesz, a sorok megnőnek, és anélkül elgördülne a sor
+  var sorKeres=function(){var l=document.querySelectorAll('#list-bent .c');for(var i=0;i<l.length;i++){if((l[i].getAttribute('onclick')||'').indexOf("nyit('"+no+"')")===0)return l[i];}return null;};
+  var s0=sorKeres(),t0=s0?s0.getBoundingClientRect().top:null;
+  AKT=AKT===no?null:no;rajzBent();
+  var s1=sorKeres();if(s1&&t0!==null){var d=s1.getBoundingClientRect().top-t0;if(Math.abs(d)>1)window.scrollBy(0,d);}
   var o=AKT&&D.rendelesek.filter(function(x){return x.no===no})[0];
   if(o&&o.ujra&&o.ujra.db>1&&!KOR[o.id]){KOR[o.id]={tolt:1};
     google.script.run.withSuccessHandler(function(r){KOR[o.id]=r;rajzBent();}).withFailureHandler(function(e){KOR[o.id]={lista:[],uzenet:'Hiba: '+e.message};rajzBent();}).korabbiRendelesek(KULCS,o.id);}}
