@@ -653,7 +653,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
-var AKU_VERZIO='2026-11-15 · 35';
+var AKU_VERZIO='2026-11-16 · 36';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -701,10 +701,9 @@ function utemKesobb(o){return !!(o.utem&&o.utem.felad>maNap());}
 function feladas(){
   var B=(D&&D.beall)||{autoKg:1400,sok:70};
   var L=D.rendelesek.filter(function(o){var l=o.lanc||{};return !utemKesobb(o)&&!o.fagy&&!o.sajat&&!o.beszall&&!l.felvet&&!l.kesz});
-  var cut=null;
-  if(L.length>=B.sok){var h=new Date();h.setHours(9,0,0,0);if(new Date()>h){cut=h;L=L.filter(function(o){return new Date(o.datum)<h});}}
   var kg=L.reduce(function(s,o){return s+(o.suly||0)},0);
-  return {kg:kg,db:L.length,cut:cut,auto:B.autoKg};
+  var E=L.filter(function(o){return exportalt(o)||pannonban(o)}),eKg=E.reduce(function(s,o){return s+(o.suly||0)},0);
+  return {kg:kg,db:L.length,cut:null,auto:B.autoKg,eDb:E.length,eKg:eKg};
 }
 function vanSvg(p,i){
   var SOR=8,H=4.3,x0=9,x1=109,alja=45,egys=p*SOR,tek='';
@@ -730,7 +729,7 @@ function rajzFeladas(anim){
     for(var i=0;i<7;i++)row+=i<T?'<i style="--w:'+WOOD[i%3]+'"></i>':'<i class="u"></i>';
     sl+='<div class="szl" title="'+(r+1)+'. autó: '+Math.round(fr*100)+'%">'+row+'</div>';}
   var h='<div class="l"><span>Mai feladás</span><span>'+(n?n+' autó':'')+'</span></div><div class="v" id="fel-kg">'+kg(F.kg)+'</div>'+
-    '<div class="s">'+F.db+' rendelés'+(le?' · '+le:'')+'</div>'+(F.cut?'<div class="s">'+D.beall.sok+'+ rendelés: csak a 9:00-ig beérkezettek</div>':'')+
+    '<div class="s">'+F.db+' rendelés'+(le?' · '+le:'')+'</div>'+'<div class="s">Ebből exportálva: '+F.eDb+' rendelés · '+kg(F.eKg)+'</div>'+
     (n?'<div class="slats" role="img" aria-label="Autónként: '+esc(le)+'">'+sl+(n>6?'<div class="s">+ '+(n-6)+' további autó</div>':'')+'</div>':'<div class="ures">✓ Nincs feladandó</div>');
   document.getElementById('fel').innerHTML=h;
   var m=document.getElementById('maim-fel');if(m)m.innerHTML='<div class="sub">Mai feladás</div><div class="v">'+kg(F.kg)+'</div><div class="sub">'+(n?n+' autó · '+le:'–')+'</div>'+(n?'<div class="slats">'+sl+'</div>':'');
@@ -977,9 +976,9 @@ function fuDoboz(o){
   var j=o.javaslat,id=o.id,h='<div class="fubox" onclick="event.stopPropagation()"><h4>Utasítás a futárnak</h4>'+
     '<input id="fu-'+id+'" maxlength="100" placeholder="pl. 12:00 után, okt. 1-től" value="'+esc(o.fu||'')+'">'+
     '<div class="sor"><button class="btn fo" onclick="fuMent(\''+id+'\')">Mentés</button>'+(o.fu?'<button class="btn" onclick="rkKuld(\''+id+'\',{fu:\'\'})">Törlés</button>':'')+
-    '<span class="sub">A címkére kerül (cím-megjegyzés), max. 100 kar.</span></div>'+
-    '<h4 style="margin-top:10px">Kért nap (ütemezés)</h4><div class="sor"><input type="date" id="un-'+id+'" style="width:auto" value="'+esc(o.utemKezi&&o.utem?o.utem.nap:'')+'">'+
-    '<button class="btn" onclick="var v=document.getElementById(\'un-'+id+'\').value;if(v)rkKuld(\''+id+'\',{nap:v})">Ütemezés</button>'+
+    '</div>'+
+    '<h4 style="margin-top:10px">Kért nap</h4><div class="sor">'+utemValaszto(id,o.utemKezi&&o.utem?o.utem.nap:'')+
+    '<button class="btn" onclick="utemMent(\''+id+'\')">Ütemezés</button>'+
     (o.utemKezi?'<button class="btn" onclick="rkKuld(\''+id+'\',{nap:\'\'})">Ütemezés törlése</button>':'')+
     (o.utem?'<span class="sub">Feladás: '+honapNap(o.utem.felad)+'</span>':'')+'</div>';
   if(j){h+='<div class="javas"><b>Javaslat '+(j.levelId==='megj'?'a megjegyzésből':'a levélből')+':</b>'+(j.idezet?'<q>„'+esc(j.idezet)+'”</q>':'')+'<div class="sor">'+
@@ -987,6 +986,23 @@ function fuDoboz(o){
     (j.fu?'<button class="btn'+(j.nap?'':' fo')+'" onclick="fuJav(\''+id+'\')">Futárnak: „'+esc(j.fu)+'”</button>':'')+
     '<button class="btn" onclick="rkKuld(\''+id+'\',{elvet:\''+esc(j.levelId)+'\'})">Elvetem</button></div></div>';}
   return h+'</div>';}
+// Kért nap: csak hónap és nap választható, az év automatikus (idén, ha a nap már elmúlt, jövőre)
+function utemValaszto(id,nap){
+  var m=nap?Number(nap.slice(5,7)):0,d=nap?Number(nap.slice(8,10)):0,h='<select id="um-'+id+'" style="width:auto"><option value="">hónap</option>',i;
+  var HN=['jan.','febr.','márc.','ápr.','máj.','jún.','júl.','aug.','szept.','okt.','nov.','dec.'];
+  for(i=1;i<=12;i++)h+='<option value="'+i+'"'+(m===i?' selected':'')+'>'+HN[i-1]+'</option>';
+  h+='</select><select id="ud-'+id+'" style="width:auto"><option value="">nap</option>';
+  for(i=1;i<=31;i++)h+='<option value="'+i+'"'+(d===i?' selected':'')+'>'+i+'.</option>';
+  return h+'</select>';
+}
+function utemMent(id){
+  var m=Number((document.getElementById('um-'+id)||{}).value),d=Number((document.getElementById('ud-'+id)||{}).value);
+  if(!m||!d)return;
+  var t=new Date(),ev=t.getFullYear(),pad=function(n){return (n<10?'0':'')+n};
+  var x=new Date(ev,m-1,d);if(x.getMonth()!==m-1){alert('Ez a nap nem létezik ebben a hónapban.');return;}
+  var ma=new Date(t.getFullYear(),t.getMonth(),t.getDate());if(x<ma)ev++;
+  rkKuld(id,{nap:ev+'-'+pad(m)+'-'+pad(d)});
+}
 function fuMent(id){var i=document.getElementById('fu-'+id);if(i)rkKuld(id,{fu:i.value});}
 function fuJav(id){var o=D.rendelesek.filter(function(x){return x.id===id})[0];if(!o||!o.javaslat)return;
   var v=o.fu?o.fu+' · '+o.javaslat.fu:o.javaslat.fu;var i=document.getElementById('fu-'+id);if(i){i.value=v.slice(0,100);i.focus();}}
@@ -1011,7 +1027,7 @@ function reszlet(o){
     :'';
   var J=foJel(o).filter(function(j){return !/^✉/.test(j.t)});
   return '<div><h4>Feladás állapota</h4>'+lanc(o)+'<h4 style="margin-top:14px">Tételek</h4>'+tetelHtml(o,false)+'<div class="sub" style="margin-top:4px">Ragasztó: '+o.ragaszto+' db</div></div>'+
-    '<div><h4>Jelzések</h4>'+(J.map(function(j){return '<span class="tg t-'+j.s+'" style="margin:0 4px 4px 0">'+esc(j.t)+'</span>'}).join('')||'<span class="sub">Nincs.</span>')+
+    '<div>'+(J.length?'<h4>Jelzések</h4>'+J.map(function(j){return '<span class="tg t-'+j.s+'" style="margin:0 4px 4px 0">'+esc(j.t)+'</span>'}).join(''):'')+
       (o.megjegyzes?'<h4 style="margin-top:12px">Megjegyzés</h4><div style="white-space:pre-wrap">'+esc(o.megjegyzes)+'</div>':'')+((o.attr&&o.attr.length)?'<h4 style="margin-top:12px">További részletek</h4><div style="white-space:pre-wrap">'+o.attr.map(esc).join('\n')+'</div>':'')+
       (o.kuponok.length?'<h4 style="margin-top:12px">Kupon</h4>'+o.kuponok.map(esc).join(', '):'')+fuDoboz(o)+'</div>'+
     (m?'<div><h4>Kapcsolódó email</h4>'+m+'</div>':'')+
@@ -1889,7 +1905,7 @@ function vrKartya(v){
     fut='<div class="box '+c+'"><b class="l">Utasítás a futárnak</b>'+(v.futar?'„'+esc(v.futar)+'”':'<span class="sub">–</span>')+(kg&&kg.s!=='b'?'<div style="margin-top:3px;font-weight:600">'+(kg.s==='r'?'⚠ ':'')+esc(kg.t)+'</div>':'')+'</div>';
   }
   var tl=v.tl&&v.tl.length?'<div style="margin-top:6px"><div class="sub">Csomag útvonala</div><div class="tl">'+v.tl.map(function(e){return '<div class="'+(/sikertelen|nem volt|megtagad|ismeretlen/i.test(e[1])?'bad':'')+'">'+esc(datum(e[0]))+' – '+esc(e[1])+'</div>'}).join('')+'</div></div>':'';
-  var sel='<select onchange="vrMent(\''+v.sz+'\',{ok:this.value})"'+(lez?' disabled':'')+'><option value="">– Döntés –</option>'+Object.keys(VR_OK).map(function(k){return '<option value="'+k+'"'+(v.ok===k?' selected':'')+'>'+VR_OK[k]+'</option>'}).join('')+'</select>';
+  var sel='<select onchange="vrMent(\''+v.sz+'\',{ok:this.value})"'+(lez?' disabled':'')+'><option value="">– Döntés –</option>'+Object.keys(VR_OK).filter(function(k){return !(v.tipus==='visszakuldes'&&k==='nemkell'&&v.ok!=='nemkell')}).map(function(k){return '<option value="'+k+'"'+(v.ok===k?' selected':'')+'>'+VR_OK[k]+'</option>'}).join('')+'</select>';
   return '<div class="pc '+szin+'"><div class="top"><b>'+esc(v.no||'–')+' · '+esc(v.nev)+'</b><span class="sub">'+esc(v.varos)+'</span></div>'+
     '<div>'+all+jel+nap+'</div><div style="margin:4px 0">'+vrLevChip(v)+'</div>'+ok+fut+vrKovHtml(v)+(v.megj?'<div class="sub" style="margin-top:4px">📝 '+esc(v.megj)+'</div>':'')+
     '<div class="vr"><label><input type="checkbox" class="cb" '+(v.megerkezett?'checked':'')+(lez?' disabled':'')+' onchange="vrMent(\''+v.sz+'\',{megerkezett:this.checked})"> Megérkezett</label>'+sel+
