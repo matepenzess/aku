@@ -653,7 +653,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
-var AKU_VERZIO='2026-11-16 · 36';
+var AKU_VERZIO='2026-11-16 · 37';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -1535,7 +1535,7 @@ function spZ(r){
 }
 function spKert(r){return (spB().kert||{})[r.no]||{};}
 function spHatarido(fel){var d=dNap(fel),n=0;do{d.setDate(d.getDate()+1);n++}while(!mnapE(ymd(d))&&n<15);d.setHours(8,0,0,0);return d;}
-function spAuto(r){var h=spB().hatar||200000;return (r.uv>=h)||((SP_ERT[r.no]||0)>=h)||!!spKert(r).nap||r.forras==='myPXP'||r.forras==='zárás';}
+function spAuto(r){var h=spB().hatar||200000;return (r.uv>=h)||((SP_ERT[r.no]||0)>=h)||/csere/i.test(String(r.ref||''));}   // automatikusan csak: csere vagy nagy utánvét (a többit te veszed fel kézzel)
 function spCsengo(r){var z=spZ(r);if(z.b===1)return true;if(z.b===0)return false;return z.f!==0&&spAuto(r);}
 // a Speciális fülre tartozik-e a csomag (ma = mai nap)
 function spBenne(r,ma){
@@ -1621,7 +1621,7 @@ function rajzSpec(){
   var nM=P.filter(function(r){return LV[r.sz]}).length,nO=P.length+RB.length;
   var em=document.getElementById('c-spec');if(em){em.textContent=nO;em.style.color=nP?'var(--r)':'';em.title=nP?nP+' problémás':''}
   var sub=document.getElementById('sp-sub');sub.hidden=!SP_SUGO;
-  sub.textContent='Ide kerül: nagy értékű ('+ft(spB().hatar||200000)+' felett) és kért napra szállított csomag, egyedi (nem az appból feladott) csomag, és amit te vettél fel kézzel (csomag vagy bent lévő rendelés). A zöld sor csak a kézbesítés napján látszik. Jobb klikk vagy hosszú nyomás egy soron: figyelés, értesítés. A 🔔/🔕 csak akkor látszik, ha az értesítés eltér az alaptól (az automatikusan figyelt csomagon alapból be van kapcsolva). Bent lévő rendelést a Bent lévők fülön vehetsz fel. A kártyákra kattintva szűrhetsz.';
+  sub.textContent='Ide kerül: csere (a referenciában „csere”), nagy értékű ('+ft(spB().hatar||200000)+' felett) utánvétes csomag, és amit te vettél fel kézzel (csomag vagy bent lévő rendelés). A zöld sor csak a kézbesítés napján látszik. Jobb klikk vagy hosszú nyomás egy soron: figyelés, értesítés. A 🔔/🔕 csak akkor látszik, ha az értesítés eltér az alaptól (az automatikusan figyelt csomagon alapból be van kapcsolva). Bent lévő rendelést a Bent lévők fülön vehetsz fel. A kártyákra kattintva szűrhetsz.';
   var kart=function(k,cls,n,txt){return '<button class="csk '+cls+(n?'':' nul')+(SP_SZUR===k?' on':'')+'" onclick="spSzur(\''+k+'\')"><b>'+n+'</b><span>'+txt+'</span></button>'};
   document.getElementById('sp-kartya').innerHTML=kart('p','r',nP,'Problémás')+kart('y','a',nY,'Úton')+kart('g','g',nG,'Kézbesítve ma')+kart('m','b',nM,'✉ Email jött')+kart('b','',RB.length,'Nincs feladva');
   var filt=function(r){var z=r._sp.szin;return !SP_SZUR||(SP_SZUR==='p'?z==='p':SP_SZUR==='y'?(z==='y'||z==='s'):SP_SZUR==='g'?z==='g':SP_SZUR==='m'?!!LV[r.sz]:false)};
