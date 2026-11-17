@@ -53,7 +53,7 @@ a{color:var(--b)}
 .van.be{animation:bejon .8s cubic-bezier(.2,.7,.3,1) both}@keyframes bejon{from{transform:translateX(-200px);opacity:0}to{transform:none;opacity:1}}
 /* Kiküldött csomagok (2.14) */
 /* Speciális csomagok */
-.spsor{display:grid;grid-template-columns:12px 96px 1fr 120px 200px 36px;gap:6px 12px;align-items:center;padding:10px 12px;border-radius:11px;border:1px solid var(--ln);margin-bottom:6px;background:var(--card);cursor:pointer}
+.spsor{display:grid;grid-template-columns:12px 96px 1fr 120px 200px auto;gap:6px 12px;align-items:center;padding:10px 12px;border-radius:11px;border:1px solid var(--ln);margin-bottom:6px;background:var(--card);cursor:pointer}
 .spsor.sp-g{background:var(--gexp);border-color:var(--gexpl)}.spsor.sp-y{background:var(--yexp);border-color:var(--al)}.spsor.sp-p{background:var(--redbg);border-color:var(--redln)}
 .spsor .dot{width:10px;height:10px;border-radius:50%;background:var(--mu)}.sp-g .dot{background:var(--g)}.sp-y .dot{background:var(--a)}.sp-p .dot{background:var(--r)}
 .spno{font-weight:700;color:var(--hi);display:block}.spnev small,.spar small,.spst small{display:block;color:var(--mu2);font-size:11.5px}
@@ -72,6 +72,7 @@ a{color:var(--b)}
 .spnb .ch2{font-size:11.5px;color:var(--mu2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}.spnb .ch2 .pxk{margin-right:4px}.spnb .chs{color:var(--a)}.spnb .chm{color:var(--b)}.spnb .chm.gond{color:var(--r);font-weight:600}
 .sptobb{display:block;margin:4px 0 6px;padding:6px 14px;border-radius:9px;border:1px dashed var(--ln2);background:none;color:var(--mu2);font-size:12.5px;width:100%}.sptobb:hover{background:var(--hov);color:var(--hi)}
 .spsav .sptobb{margin:6px 0 0;padding:3px 14px}
+.spbc{display:flex;gap:4px;align-items:center;justify-content:flex-end}.spbc .spbell0{display:none}.spx{width:28px;height:28px;border-radius:8px;border:1px solid var(--ln2);background:var(--card);color:var(--mu);font-size:13px;line-height:1;padding:0;cursor:pointer;opacity:.7}.spx:hover{opacity:1;color:var(--r);border-color:var(--redln)}
 .spbell.on{background:var(--ab);color:var(--a);border-color:var(--al)}.spbell:not(.on){opacity:.55}.spbell0{display:block;width:32px;height:32px}
 button.csk{background:var(--card);cursor:pointer;font:inherit;color:inherit}
 .spcim-k{cursor:pointer;user-select:none}.spcim-k:hover{color:var(--hi)}
@@ -104,7 +105,7 @@ body.no3d .nyom{transform:none}
  #sp-kartya .csk.nul:not(.on){display:none}
  .spsav h4 .spall,.spsav h4 .spbtns,.spnb .ch>input{display:none!important}.spnb .ch{grid-template-columns:1fr;padding:4px 2px}
  .spsor{grid-template-columns:10px auto 1fr auto auto;grid-template-areas:"d no nev ar b" "d st st st b";padding:7px 12px;gap:1px 10px;align-items:start;line-height:1.3}
- .spsor>.dot{grid-area:d;margin-top:5px}.spsor>.sp1{grid-area:no}.spsor>.spnev{grid-area:nev}.spsor>.spar{grid-area:ar}.spsor>.spst{grid-area:st}.spsor>.spbell{grid-area:b;align-self:center}
+ .spsor>.dot{grid-area:d;margin-top:5px}.spsor>.sp1{grid-area:no}.spsor>.spnev{grid-area:nev}.spsor>.spar{grid-area:ar}.spsor>.spst{grid-area:st}.spsor>.spbell{grid-area:b;align-self:center}.spsor>.spbc{grid-area:b;align-self:center}
  .spsor>.spbell0,.spsor .spar small{display:none}
  .spsor>.spst{display:flex;gap:0 8px;flex-wrap:wrap;align-items:baseline}.spsor .spst b,.spsor .spst small{display:inline}
  .spsor .spno{font-size:14px}.spdet{padding:0 4px 4px}
@@ -504,7 +505,7 @@ body.tb-huz{overflow:hidden;-webkit-user-select:none;user-select:none}
 .javfej{display:flex;align-items:center;gap:10px;cursor:pointer}.javfej b{font-size:14px;color:var(--p)}
 .javlista{max-height:260px;overflow:auto;margin-top:8px}.javsor{display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--ln);font-size:13px}
 .javsor select{max-width:240px;background:var(--bg);color:var(--tx);border:1px solid var(--ln2);border-radius:7px;padding:3px 6px;font-size:12px}
-#stats-vr[hidden]{display:none}
+#stats-vr[hidden],.vcl[hidden]{display:none}
 .egysor{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tl{font-size:12px;color:var(--mu2);margin:4px 0 0}.tl div{padding:1px 0}.tl .bad{color:var(--r)}
 .kov{margin:6px 0;padding:8px 10px;border:1px solid var(--bl);border-radius:8px;background:var(--bb);font-size:12.5px}
@@ -653,7 +654,7 @@ function temaAlk(){var m=window.matchMedia('(prefers-color-scheme: dark)'),t=TEM
 temaAlk();(function(){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',temaAlk);else if(mq.addListener)mq.addListener(temaAlk);})();
 function temaSb(){var e=document.getElementById('tema-sb');if(!e||!window.AKU_WEB)return;e.hidden=false;e.innerHTML=[['system','Auto'],['light','Világos'],['dark','Sötét']].map(function(x){return '<button class="'+(TEMA_PREF===x[0]?'on':'')+'" onclick="temaVal(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');}
 function temaVal(m){TEMA_PREF=m;try{localStorage.setItem('tema3',m)}catch(e){}temaAlk();temaSb();if(document.querySelector('.tobb-l'))tobb();}
-var AKU_VERZIO='2026-11-16 · 37';
+var AKU_VERZIO='2026-11-17 · 38';
 function tobb(){
   var th=function(m,n){return '<button class="'+(TEMA_PREF===m?'on':'')+'" onclick="temaVal(\''+m+'\')">'+n+'</button>'};
   var li=function(t,n,c){return '<button class="tobb-i" onclick="zar();ful(\''+t+'\')">'+n+'<em>'+(document.getElementById(c)?document.getElementById(c).textContent:'')+'</em></button>'};
@@ -1597,6 +1598,14 @@ function spCsengoGomb(r,key){
   if(cs===def)return '<span class="spbell0"></span>';
   return '<button class="spbell'+(cs?' on':'')+'" title="'+(cs?'Kézzel bekapcsolt értesítés – kattints a kikapcsoláshoz':'Az értesítés ki van kapcsolva – kattints a bekapcsoláshoz')+'" onclick="event.stopPropagation();spCsengoKapcs(\''+esc(key)+'\')">'+(cs?'🔔':'🔕')+'</button>';
 }
+// a sor jobb szélén: (ha eltér) csengő + ✕ = kivétel a Speciális fülről (már nem aktuális)
+function spBc(bell,key){return '<span class="spbc">'+bell+'<button class="spx" title="Kivétel a Speciális fülről (már nem aktuális)" onclick="event.stopPropagation();spX(\''+esc(key)+'\')">✕</button></span>';}
+function spX(key){
+  if(/^#/.test(key)){spMent(key,'f',null,'Kikerült a Speciálisból');return;}   // kézzel felvett, még nem feladott rendelés
+  var r=spSor(key);if(!r)return;
+  var z=spZ(r);
+  if(z.f===1)spMent(z.fk,'f',null,'Kikerült a Speciálisból');else spMent(key,'f',0,'Kikerült a Speciálisból');
+}
 // Gmail-piszkozat a PannonXP-nek (info@pannonxp.hu, tárgy = nyomkövetési szám); csak piszkozat, nem küld el semmit
 function spEmail(szk,b){
   if(!szk||!szk.length)return;
@@ -1621,7 +1630,7 @@ function rajzSpec(){
   var nM=P.filter(function(r){return LV[r.sz]}).length,nO=P.length+RB.length;
   var em=document.getElementById('c-spec');if(em){em.textContent=nO;em.style.color=nP?'var(--r)':'';em.title=nP?nP+' problémás':''}
   var sub=document.getElementById('sp-sub');sub.hidden=!SP_SUGO;
-  sub.textContent='Ide kerül: csere (a referenciában „csere”), nagy értékű ('+ft(spB().hatar||200000)+' felett) utánvétes csomag, és amit te vettél fel kézzel (csomag vagy bent lévő rendelés). A zöld sor csak a kézbesítés napján látszik. Jobb klikk vagy hosszú nyomás egy soron: figyelés, értesítés. A 🔔/🔕 csak akkor látszik, ha az értesítés eltér az alaptól (az automatikusan figyelt csomagon alapból be van kapcsolva). Bent lévő rendelést a Bent lévők fülön vehetsz fel. A kártyákra kattintva szűrhetsz.';
+  sub.textContent='Ide kerül: csere (a referenciában „csere”), nagy értékű ('+ft(spB().hatar||200000)+' felett) utánvétes csomag, és amit te vettél fel kézzel (csomag vagy bent lévő rendelés). A zöld sor csak a kézbesítés napján látszik. A ✕ kiveszi a sort a fülről (ha már nem aktuális); jobb klikk vagy hosszú nyomás egy soron: figyelés, értesítés. A 🔔/🔕 csak akkor látszik, ha az értesítés eltér az alaptól (az automatikusan figyelt csomagon alapból be van kapcsolva). Bent lévő rendelést a Bent lévők fülön vehetsz fel. A kártyákra kattintva szűrhetsz.';
   var kart=function(k,cls,n,txt){return '<button class="csk '+cls+(n?'':' nul')+(SP_SZUR===k?' on':'')+'" onclick="spSzur(\''+k+'\')"><b>'+n+'</b><span>'+txt+'</span></button>'};
   document.getElementById('sp-kartya').innerHTML=kart('p','r',nP,'Problémás')+kart('y','a',nY,'Úton')+kart('g','g',nG,'Kézbesítve ma')+kart('m','b',nM,'✉ Email jött')+kart('b','',RB.length,'Nincs feladva');
   var filt=function(r){var z=r._sp.szin;return !SP_SZUR||(SP_SZUR==='p'?z==='p':SP_SZUR==='y'?(z==='y'||z==='s'):SP_SZUR==='g'?z==='g':SP_SZUR==='m'?!!LV[r.sz]:false)};
@@ -1668,7 +1677,7 @@ function rajzSpec(){
       '<div class="spnev">'+esc(r.nev||'Ismeretlen címzett (adatok betöltés alatt)')+' '+tg+(inf.length?'<small>'+inf.join(' · ')+'</small>':'')+ev+lep+'</div>'+
       '<div class="spar">'+osszeg+'</div>'+
       '<div class="spst"><b>'+esc(o.t)+'</b>'+(kis?'<small>'+esc(kis)+'</small>':'')+'</div>'+
-      spCsengoGomb(r,sz)+'</div>'+
+      spBc(spCsengoGomb(r,sz),sz)+'</div>'+
       (SPNY[sz]?'<div class="spdet">'+csDet(r)+'</div>':'');
   };
   var rendHtml=function(o){
@@ -1678,7 +1687,7 @@ function rajzSpec(){
       '<div class="spnev">'+esc(o.nev)+' <span class="tg t-szurke">kézzel felvett</span>'+((nap||fu)?'<small>'+(nap?'Kért nap: <b>'+esc(spNapSzov(nap))+'</b>':'')+(nap&&fu?' · ':'')+(fu?'„'+esc(fu)+'”':'')+'</small>':'')+'</div>'+
       '<div class="spar">'+ft(o.osszeg)+'<small>'+esc(o.fizetes||'')+'</small></div>'+
       '<div class="spst"><b>Bent van, feladásra vár</b><small>Rendelve '+esc(mikor(o.datum))+'</small></div>'+
-      spCsengoGomb({sz:'',no:o.no,uv:0},o.no)+'</div>';
+      spBc(spCsengoGomb({sz:'',no:o.no,uv:0},o.no),o.no)+'</div>';
   };
   // csoportonként legfeljebb SP_MAX sor látszik, a többi lenyitható; a zöld csoport alapból összecsukva
   ['p','s','y','g'].forEach(function(c){
@@ -1889,15 +1898,16 @@ function vrKovHtml(v){
   var L=['Címke kész','Felvéve','Úton','Megérkezett'];
   return '<div class="kov"><b>Visszaküldési csomag:</b> '+esc(k.allapot)+(k.felvetel&&k.felvetel!=='.'?' · felvétel '+esc(k.felvetel):'')+
     '<div class="lep">'+L.map(function(x,i){return '<i class="'+(i<=k.lepes?'k':'')+'"></i>'}).join('')+'</div><div class="lc">'+L.map(function(x){return '<span>'+x+'</span>'}).join('')+'</div>'+
-    '<div class="sub" style="margin-top:4px">Csomagszám: '+pxKod(k.sz)+'</div></div>';
+    '<div class="sub" style="margin-top:4px">Csomagszám: '+pxKod(k.sz)+(v.futarSz?' <a href="#" onclick="vrFutarMod(\''+v.sz+'\');return false" style="color:var(--b)">módosít</a>':'')+'</div></div>';
 }
 function vrKartya(v){
   var lez=v.lezarva||v.auto;
   var szin=lez?'szurke':v.ok==='ujra'?'lila':v.megerkezett&&!v.ok?'piros':v.megerkezett?'zold':'sarga';
   var all=v.auto?'<span class="tg t-zold">Újraküldött csomag kézbesítve – nincs teendő</span>':v.lezarva?'<span class="tg t-szurke">Lezárva</span>':
+    !v.megerkezett&&v.csomagKovet?'<span class="tg t-kek">🚚 Futár küldve'+(v.csomagKovet.felvetel?' · felvétel '+esc(v.csomagKovet.felvetel):'')+'</span>':
     v.megerkezett?'<span class="tg t-zold">Megérkezett '+(v.megerkIdo?new Date(v.megerkIdo).toLocaleString('hu-HU',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'')+'</span>':'<span class="tg t-sarga">Még nem érkezett meg</span>';
   var kg=vrKertGond(v),nap=kg&&kg.s==='b'?'<span class="tg t-kek">📅 Kért nap: '+vrHn(v.kert)+'</span>':'';
-  var jel=(v.forras==='email'?'<span class="tg t-lila">emailből felvéve</span>':'')+(!v.csvben&&!v.kezi?'<span class="tg t-szurke">régi, CSV-ben már nincs</span>':'');
+  var jel=(v.mod==='sajat'?'<span class="tg t-kek">Saját költségen küldi</span>':'')+(v.forras==='email'?'<span class="tg t-lila">emailből felvéve</span>':'')+(!v.csvben&&!v.kezi?'<span class="tg t-szurke">régi, CSV-ben már nincs</span>':'');
   var ok=v.pxpOk?'<div class="box r"><b class="l">Miért jött vissza</b>'+esc(v.pxpOk)+'</div>':'';
   var fut='';
   if(v.futar||(kg&&kg.s!=='b')){
@@ -1909,7 +1919,7 @@ function vrKartya(v){
   return '<div class="pc '+szin+'"><div class="top"><b>'+esc(v.no||'–')+' · '+esc(v.nev)+'</b><span class="sub">'+esc(v.varos)+'</span></div>'+
     '<div>'+all+jel+nap+'</div><div style="margin:4px 0">'+vrLevChip(v)+'</div>'+ok+fut+vrKovHtml(v)+(v.megj?'<div class="sub" style="margin-top:4px">📝 '+esc(v.megj)+'</div>':'')+
     '<div class="vr"><label><input type="checkbox" class="cb" '+(v.megerkezett?'checked':'')+(lez?' disabled':'')+' onchange="vrMent(\''+v.sz+'\',{megerkezett:this.checked})"> Megérkezett</label>'+sel+
-    (v.tipus==='visszakuldes'&&!lez&&!v.csomagKovet?'<button class="btn" onclick="vrCsomagMod(\''+v.sz+'\')">Visszaküldési csomag adatai</button>':'')+
+    (v.tipus==='visszakuldes'&&!lez&&v.mod!=='sajat'?(v.csomagKovet?'':'<button class="btn" onclick="vrCsomagMod(\''+v.sz+'\')">Visszaküldési csomag adatai</button><button class="btn" onclick="vrFutarMod(\''+v.sz+'\')">Futár küldve ✓</button>'):'')+
     (v.auto?'':'<button class="btn'+(v.lezarva?'':' fo')+'" onclick="vrMent(\''+v.sz+'\',{lezarva:'+!v.lezarva+'})">'+(v.lezarva?'Újranyitás':'Lezárás')+'</button>')+'</div>'+
     '<details style="margin-top:8px"><summary class="sub" style="cursor:pointer">Részletek</summary>'+
     '<div class="sub" style="margin-top:6px">'+esc(v.tel||'')+(v.email?' · '+esc(v.email):'')+'</div>'+
@@ -1917,6 +1927,7 @@ function vrKartya(v){
     '<textarea class="vrm" id="vrm_'+v.sz+'" placeholder="Megjegyzés…" oninput="VRD[\''+v.sz+'\']=this.value"'+(lez?' disabled':'')+'>'+esc(v.sz in VRD?VRD[v.sz]:v.megj)+'</textarea>'+
     '<div class="vr" style="border:0;margin-top:4px;padding-top:0">'+(lez?'':'<button class="btn" onclick="vrMent(\''+v.sz+'\',{megj:document.getElementById(\'vrm_'+v.sz+'\').value})">Megjegyzés mentése</button>')+
     '<button class="btn" onclick="tbVisszarubol(\''+v.sz+'\')">Teendőbe</button>'+
+    (lez||v.tipus!=='visszakuldes'?'':'<button class="btn" onclick="vrMent(\''+v.sz+'\',{mod:\''+(v.mod==='sajat'?'futar':'sajat')+'\'})">'+(v.mod==='sajat'?'Mégis futárt küldünk':'Saját költségen küldi')+'</button>')+
     (lez?'':'<button class="btn" onclick="vrMent(\''+v.sz+'\',{tipus:\''+(v.tipus==='visszaru'?'visszakuldes':'visszaru')+'\'})">Áttétel: '+(v.tipus==='visszaru'?'Visszaküldés':'Visszaáru')+'</button>')+'</div></details></div>';
 }
 // ----- visszaküldési csomag adatai: referencia + méret/súly (a myPXP-be másolható; az automatikus számítás a feladás szabályával egyezik) -----
@@ -1943,7 +1954,7 @@ function vrCsomagMod(sz){
   var v=(D.visszaru||[]).filter(function(x){return x.sz===sz})[0];if(!v)return;
   VRC={sz:sz,rows:vrCsSzamol(v.panel||0,v.kicsi||0),auto:true};
   var csomagos=/^\d{20,}$/.test(sz)||!!v.ref&&!/×/.test(v.ref);
-  var ref0=(csomagos&&v.ref?v.ref:String(v.no||'').replace('#',''))+' vissza';
+  var ref0=(csomagos&&v.ref?v.ref:String(v.no||'').replace('#',''))+'vissza';
   var f=function(l,i,val,w){return '<label class="vcl">'+l+'<input id="'+i+'" value="'+esc(val)+'" style="width:'+w+'px"></label>'};
   modal('<h3>Visszaküldési csomag – '+esc(v.no||v.sz7)+'</h3><div class="sub">A mezők a rendelésből töltődnek ki, és mind átírhatók. A címke elkészítése egyelőre a myPXP-ben történik: innen másolod át az adatokat.</div>'+
     '<div class="box b"><b class="l">Felvétel (a vevő címéről)</b><div class="egysor" style="white-space:normal">'+esc(v.nev)+' · '+esc((v.irsz+' '+v.varos).trim())+(v.cim?', '+esc(v.cim):'')+' · '+esc(v.tel||'')+'</div></div>'+
@@ -1958,6 +1969,20 @@ function vrCsomagMod(sz){
   var h=document.getElementById('vc_ref'),hk=function(){var e=document.getElementById('vc_hossz');if(e)e.textContent=h.value.length>30?'⚠ '+h.value.length+' karakter – a PannonXP referencia 30 karakternél csonkul.':''};h.oninput=hk;hk();
 }
 function vrCMasol(el){vrCOlvas();masol(VRC.rows.map(function(r,i){return (i+1)+'. csomag: '+r.db+' panel, '+String(r.suly).replace('.',',')+' kg, '+r.h+'×'+r.sz+'×'+r.m+' cm'}).join('\n'),el);}
+function vrFutarMod(sz){
+  var v=(D.visszaru||[]).filter(function(x){return x.sz===sz})[0];if(!v)return;
+  modal('<h3>Futár küldve – '+esc(v.no||v.sz7)+'</h3><div class="sub">Add meg a myPXP-ben létrehozott visszaküldési csomag(ok) számát (a 7 jegyű szám elég, több is jó vesszővel). Ezután az állapotuk itt követhető.</div>'+
+    '<div class="vcrow"><label class="vcl">Csomagszám(ok)<input id="vfs_sz" style="width:320px" value="'+esc(v.futarSz||'')+'" placeholder="9061157, 9061143, 9061097"></label>'+
+    '<label class="vcl">Felvétel napja<input type="date" id="vfs_nap" value="'+esc(v.futarNap||v.kert||'')+'"></label></div>'+
+    '<div class="gombok">'+(v.futarSz?'<button class="btn" onclick="vrFutarMent(\''+sz+'\',true)">Törlés</button>':'')+'<button class="btn" onclick="zar()">Mégse</button><button class="btn fo" onclick="vrFutarMent(\''+sz+'\')">Mentés</button></div>');
+  setTimeout(function(){var i=document.getElementById('vfs_sz');if(i)i.focus()},50);
+}
+function vrFutarMent(sz,torol){
+  var a=torol?{futarSz:'',futarNap:''}:{futarSz:document.getElementById('vfs_sz').value,futarNap:document.getElementById('vfs_nap').value};
+  if(!torol&&!/\d{7}/.test(a.futarSz.replace(/\D/g,''))){toast('Adj meg legalább egy csomagszámot (7 jegyű, pl. 9061157).','hiba');return;}
+  google.script.run.withSuccessHandler(function(){zar();toast(torol?'Törölve.':'Futár küldve – a követés a következő frissítéskor indul.','ok',4);betolt(false);})
+    .withFailureHandler(function(e){toast('Hiba: '+esc(e.message),'hiba')}).visszaruMent(KULCS,sz,a);
+}
 var VRK=[];
 function vrUj(){
   modal('<h3>Visszáru felvétele</h3><div class="sub">Keresés az összes csomagban és a Shopify-rendelésekben (rendelésszám, név, város, csomagszám, telefon, <b>emailcím</b>).</div>'+
@@ -1980,16 +2005,18 @@ function vrValaszt(i){
   var x=VRK[i];if(!x)return;
   if((D.visszaru||[]).some(function(v){return v.sz===x.sz})){toast('Ez már a visszáruk között van.','',3);return;}
   document.getElementById('vrres').innerHTML='<div class="box b"><b class="l">Kiválasztva: '+esc(x.no||x.sz7)+' · '+esc(x.nev)+'</b>'+
-    '<div class="vcrow"><label class="vcl">Típus<select id="vf_tip"><option value="visszakuldes">Visszaküldés (vevő állt el)</option><option value="visszaru">Visszaáru (futár hozta vissza)</option></select></label>'+
-    '<label class="vcl">Állapot<select id="vf_all"><option value="">Még úton</option><option value="megerkezett">Visszaérkezett</option><option value="nemkell">Elállás</option><option value="pontositando">Pontosítandó</option><option value="ujra">Újraküldjük</option></select></label>'+
-    '<label class="vcl">Kért nap<input type="date" id="vf_kert"></label></div>'+
+    '<div class="vcrow"><label class="vcl">Típus<select id="vf_tip" onchange="vrTipValt()"><option value="visszakuldes">Visszaküldés (vevő állt el)</option><option value="visszaru">Visszaáru (futár hozta vissza)</option></select></label>'+
+    '<label class="vcl" id="vf_modd">Hogyan jön vissza<select id="vf_mod"><option value="futar">Futárt küldünk</option><option value="sajat">Saját költségen küldi</option></select></label>'+
+    '<label class="vcl" id="vf_alld" hidden>Állapot<select id="vf_all"><option value="">Még úton</option><option value="megerkezett">Visszaérkezett</option><option value="nemkell">Elállás</option><option value="pontositando">Pontosítandó</option><option value="ujra">Újraküldjük</option></select></label>'+
+    '<label class="vcl" id="vf_kertd">Kért nap<input type="date" id="vf_kert"></label></div>'+
     '<button class="btn fo" onclick="vrFel('+i+')">Felvétel</button></div>';
 }
+function vrTipValt(){var vk=document.getElementById('vf_tip').value==='visszakuldes';document.getElementById('vf_modd').hidden=!vk;document.getElementById('vf_alld').hidden=vk;document.getElementById('vf_kertd').hidden=!vk;}
 function vrFel(i){
   var x=VRK[i];if(!x)return;
-  var tip=document.getElementById('vf_tip').value,all=document.getElementById('vf_all').value,kert=document.getElementById('vf_kert').value;
+  var tip=document.getElementById('vf_tip').value,vk=tip==='visszakuldes',all=vk?'':document.getElementById('vf_all').value,kert=vk?document.getElementById('vf_kert').value:'',mod=vk?document.getElementById('vf_mod').value:'';
   google.script.run.withSuccessHandler(function(){zar();VTIP=tip;toast('Felvéve: '+esc(x.no||x.sz7),'ok',4);betolt(false);})
-    .withFailureHandler(function(e){toast('Hiba: '+esc(e.message),'hiba')}).vrFelvesz(KULCS,x,all,{tipus:tip,kert:kert});
+    .withFailureHandler(function(e){toast('Hiba: '+esc(e.message),'hiba')}).vrFelvesz(KULCS,x,all,{tipus:tip,kert:kert,mod:mod});
 }
 function vrMent(sz,adat){
   var v=(D.visszaru||[]).filter(function(x){return x.sz===sz})[0];if(!v)return;
@@ -2089,16 +2116,29 @@ function ueLezar(id,csendes){
 }
 
 // ===== EXPORT NAPLÓ =====
-var NAPLO_NY={};
+var NAPLO_NY={},NAPLO_Q='';
 function naploNyit(i){NAPLO_NY[i]=!NAPLO_NY[i];rajzNaplo();}
+// keresés: rendelésszám (a # nélkül is, részlet is jó) vagy a vevő neve
+function naploKer(v){
+  var i0=document.getElementById('naplo-q'),p=i0?i0.selectionStart:null;
+  NAPLO_Q=String(v||'');rajzNaplo();
+  var i=document.getElementById('naplo-q');if(i){i.focus();try{if(p!=null)i.setSelectionRange(p,p)}catch(e){}}
+}
+function naploNevek(){var m={};((D&&D.rendelesek)||[]).forEach(function(o){if(o.no)m[o.no]=o.nev||''});csSorok().forEach(function(r){if(r.no&&r.nev)m[r.no]=r.nev});return m;}
+function naploTalal(no,nevek){
+  var q=NAPLO_Q.trim().toLowerCase().replace(/^#/,'');if(!q)return true;
+  var d=String(no||'').replace('#','');
+  return d.indexOf(q)>=0||String(nevek[no]||'').toLowerCase().indexOf(q)>=0;
+}
 function naploReszlet(n){
   var byNo={};csSorok().forEach(function(r){if(r.no)(byNo[r.no]=byNo[r.no]||[]).push(r)});
   var ord={};((D&&D.rendelesek)||[]).forEach(function(o){ord[o.no]=o});
   var L=n.r||n.hianyzik||[];
+  var nv=naploNevek(),qv=!!NAPLO_Q.trim();
   return '<div class="nrd">'+L.map(function(no){
     var cs=byNo[no]||[],o=ord[no],nev=cs[0]?cs[0].nev:(o?o.nev:''),varos=cs[0]?cs[0].varos:(o?o.varos:'');
     var all=cs.length?cs.map(function(c){var a=csAll(c);return '<span class="tg t-'+a.c+'">'+esc(a.t)+'</span> <span class="sub">'+esc(String(c.sz).slice(5,12))+'</span>'}).join(' '):'<span class="tg t-piros">Nincs feladva – nem jelent meg a PannonXP-ben</span>';
-    return '<div class="nr"><div><b>'+esc(no)+'</b> <span>'+esc(nev)+(varos?' · '+esc(varos):'')+'</span></div><div class="nra">'+all+'</div></div>';}).join('')+'</div>';
+    return '<div class="nr"'+(qv&&naploTalal(no,nv)?' style="background:var(--ab)"':'')+'><div><b>'+esc(no)+'</b> <span>'+esc(nev)+(varos?' · '+esc(varos):'')+'</span></div><div class="nra">'+all+'</div></div>';}).join('')+'</div>';
 }
 function zeneStop(){try{window.aku.zene.stop()}catch(e){}document.getElementById('zene-stop').hidden=true}
 (function(){if(!(window.aku&&window.aku.zene&&window.aku.zene.playing))return;
@@ -2109,25 +2149,31 @@ function lapNyit(i){LAP_NY[i]=!LAP_NY[i];rajzNaplo();}
 function rajzLapok(){
   var L=D.lapok||[];if(!L.length)return '<h2 class="nh">Nyomtatott lapok</h2><div class="empty">Még nincs rögzített lap. Az appból nyomtatott címkelapok és gyűjtőlisták itt jelennek meg (a myPXP webes felületén készítettek nem).</div>';
   var byS={};csSorok().forEach(function(r){byS[r.sz]=r});
-  var ma=ymd(dNap(maNap()));
-  return '<h2 class="nh">Nyomtatott lapok</h2><div class="tbl"><div class="tr3 h"><div>Időpont</div><div>Lap</div><div>Csomagok</div><div>Állapot</div></div>'+L.map(function(l,i){
+  var ma=ymd(dNap(maNap())),nv=naploNevek(),qv=!!NAPLO_Q.trim();
+  if(qv){var LI=[];L.forEach(function(l,i){if(l.sz.some(function(z){var c=byS[z];return c&&naploTalal(c.no,nv)}))LI.push([l,i])});
+    if(!LI.length)return '<h2 class="nh">Nyomtatott lapok</h2><div class="empty">Nincs ilyen rendelés a nyomtatott lapok között.</div>';}
+  else{var LI=L.map(function(l,i){return [l,i]});}
+  return '<h2 class="nh">Nyomtatott lapok</h2><div class="tbl"><div class="tr3 h"><div>Időpont</div><div>Lap</div><div>Csomagok</div><div>Állapot</div></div>'+LI.map(function(p){var l=p[0],i=p[1];
     var cs=l.sz.map(function(z){return byS[z]}).filter(Boolean);
     var elo=cs.filter(function(c){return !c.kod||c.kod===20||c.kod===30}).length,reg=ymd(new Date(l.ido))<ma;
     var all=!cs.length?'<span class="tg t-szurke">Nincs adat</span>':
       elo===cs.length?(reg?'<span class="tg t-piros">Mind csak előkészítve – lehet, hogy nem ment a futárnak</span>':'<span class="tg t-szurke">Mind előkészítve (ma nyomtatva)</span>'):
       elo?'<span class="tg t-sarga">'+elo+'/'+cs.length+' még előkészítve</span>':'<span class="tg t-zold">✓ Mind beolvasva</span>';
-    var det=LAP_NY[i]?'<div class="nrbox"><div class="nrd">'+l.sz.map(function(z){var c=byS[z],a=c?csAll(c):null;return '<div class="nr"><div><b>'+esc(c&&c.no||'?')+'</b> <span>'+esc(c?(c.nev||'')+(c.varos?' · '+c.varos:''):'')+'</span></div><div class="nra">'+(a?'<span class="tg t-'+a.c+'">'+esc(a.t)+'</span>':'')+' <span class="sub">'+esc(String(z).slice(5,12))+'</span></div></div>'}).join('')+'</div></div>':'';
-    return '<div class="tr3 nrow" role="button" tabindex="0" onclick="lapNyit('+i+')" onkeydown="if(event.key===\'Enter\')lapNyit('+i+')"><div class="no">'+(LAP_NY[i]?'▾ ':'▸ ')+new Date(l.ido).toLocaleString('hu-HU',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</div><div class="sub">'+(l.tip==='zaras'?'Gyűjtőlista':'Címkelap')+' · '+esc(l.fiok)+'</div><div>'+l.sz.length+' db</div><div>'+all+'</div></div>'+det;}).join('')+'</div>';
+    var det=(LAP_NY[i]||qv)?'<div class="nrbox"><div class="nrd">'+l.sz.map(function(z){var c=byS[z],a=c?csAll(c):null;return '<div class="nr"'+(qv&&c&&naploTalal(c.no,nv)?' style="background:var(--ab)"':'')+'><div><b>'+esc(c&&c.no||'?')+'</b> <span>'+esc(c?(c.nev||'')+(c.varos?' · '+c.varos:''):'')+'</span></div><div class="nra">'+(a?'<span class="tg t-'+a.c+'">'+esc(a.t)+'</span>':'')+' <span class="sub">'+esc(String(z).slice(5,12))+'</span></div></div>'}).join('')+'</div></div>':'';
+    return '<div class="tr3 nrow" role="button" tabindex="0" onclick="lapNyit('+i+')" onkeydown="if(event.key===\'Enter\')lapNyit('+i+')"><div class="no">'+((LAP_NY[i]||qv)?'▾ ':'▸ ')+new Date(l.ido).toLocaleString('hu-HU',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</div><div class="sub">'+(l.tip==='zaras'?'Gyűjtőlista':'Címkelap')+' · '+esc(l.fiok)+'</div><div>'+l.sz.length+' db</div><div>'+all+'</div></div>'+det;}).join('')+'</div>';
 }
 function rajzNaplo(){
   var N=D.naplo||[],el=document.getElementById('naplo');
-  if(!N.length){el.innerHTML='<div class="empty">Még nem volt Pannon export.</div>'+rajzLapok();return;}
-  el.innerHTML='<div class="tbl"><div class="tr3 h"><div>Időpont</div><div>Fájl</div><div>Rendelések</div><div>Megjelent a PannonXP-ben?</div></div>'+
-    N.map(function(n,i){
+  var kereso='<div style="margin:0 0 10px"><input id="naplo-q" type="search" autocomplete="off" placeholder="Keresés rendelésszámra vagy névre (pl. 11437)" value="'+esc(NAPLO_Q)+'" oninput="naploKer(this.value)" style="width:100%;max-width:420px"></div>';
+  if(!N.length){el.innerHTML=kereso+'<div class="empty">Még nem volt Pannon export.</div>'+rajzLapok();return;}
+  var qv=!!NAPLO_Q.trim(),nv=naploNevek();
+  var NI=[];N.forEach(function(n,i){if(!qv||(n.r||n.hianyzik||[]).some(function(no){return naploTalal(no,nv)}))NI.push([n,i])});
+  el.innerHTML=kereso+(qv&&!NI.length?'<div class="empty">Nincs ilyen rendelés az exportok között.</div>':'<div class="tbl"><div class="tr3 h"><div>Időpont</div><div>Fájl</div><div>Rendelések</div><div>Megjelent a PannonXP-ben?</div></div>'+
+    NI.map(function(p){var n=p[0],i=p[1];
       var all=n.hianyzik.length===0?'<span class="tg t-zold">✓ Mind feladva ('+n.megjelent+'/'+n.db+')</span>':
         !n.csvUtan?'<span class="tg t-szurke">Vár a következő CSV-re ('+n.megjelent+'/'+n.db+')</span>':
         '<span class="tg t-piros">Hiányzik '+n.hianyzik.length+': '+n.hianyzik.map(esc).join(', ')+'</span>';
-      return '<div class="tr3 nrow" role="button" tabindex="0" onclick="naploNyit('+i+')" onkeydown="if(event.key===\'Enter\')naploNyit('+i+')"><div class="no">'+(NAPLO_NY[i]?'▾ ':'▸ ')+new Date(n.ido).toLocaleString('hu-HU',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</div><div class="sub" style="word-break:break-all">'+esc(n.fajl)+'</div><div>'+n.db+' db</div><div>'+all+'</div></div>'+(NAPLO_NY[i]?'<div class="nrbox">'+naploReszlet(n)+'</div>':'');}).join('')+'</div>'+rajzLapok();
+      return '<div class="tr3 nrow" role="button" tabindex="0" onclick="naploNyit('+i+')" onkeydown="if(event.key===\'Enter\')naploNyit('+i+')"><div class="no">'+((NAPLO_NY[i]||qv)?'▾ ':'▸ ')+new Date(n.ido).toLocaleString('hu-HU',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</div><div class="sub" style="word-break:break-all">'+esc(n.fajl)+'</div><div>'+n.db+' db</div><div>'+all+'</div></div>'+((NAPLO_NY[i]||qv)?'<div class="nrbox">'+naploReszlet(n)+'</div>':'');}).join('')+'</div>')+rajzLapok();
 }
 
 // ===== MATE KUPON =====
